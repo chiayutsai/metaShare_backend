@@ -11,25 +11,16 @@ const userSchema = new mongoose.Schema(
       required: [true, '請輸入您的 Email'],
       unique: true,
       lowercase: true,
-      select: false
+      select: false,
     },
     password: {
       type: String,
       required: [true, '請輸入您的 密碼'],
-      select: false
+      select: false,
     },
-    avator:{
-      type:String
+    avator: {
+      type: String,
     },
-    coverImage:{
-      type:String
-    },
-    descroption:{
-      type:String,
-    },
-    tags:{
-      type:Array,
-    }
   },
   { versionKey: false }
 )

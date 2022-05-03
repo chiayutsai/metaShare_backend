@@ -4,7 +4,7 @@ const postSchema = new mongoose.Schema(
   {
     author: {
       type: mongoose.Schema.ObjectId,
-      ref:"User",
+      ref: 'User',
       required: [true, 'User ID 未填寫'],
     },
     content: {
@@ -21,7 +21,11 @@ const postSchema = new mongoose.Schema(
     },
     likes: {
       type: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
-      default:[],
+      default: [],
+    },
+    comments: {
+      type: [{ commenter: { type: mongoose.Schema.ObjectId, ref: 'User' }, content: String, createdAt: Date }],
+      default: [],
     },
   },
   { versionKey: false }

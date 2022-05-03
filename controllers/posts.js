@@ -5,18 +5,15 @@ const User = require('../models/UsersModel')
 const postsControllers = {
   async getPosts(req, res) {
     const post = await Post.find().populate({
-      path:"author",
-      select:"name avator"
-    }).populate({
-      path:"likes",
-      select:"name avator"
+      path: 'author',
+      select: 'name avator',
     })
     successHandle(res, post)
   },
 
   async addPosts(req, res) {
     try {
-      const data  = req.body
+      const data = req.body
       const post = await Post.create(req.body)
       successHandle(res, post, '新增成功')
     } catch (error) {
@@ -46,7 +43,7 @@ const postsControllers = {
       errorHandle(res, error, '查無此 id')
     }
   },
-  
+
   async updatePost(req, res) {
     try {
       const { id } = req.params
