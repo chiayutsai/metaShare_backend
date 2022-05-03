@@ -1,0 +1,39 @@
+const mongoose = require('mongoose')
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, '請輸入您的暱稱'],
+    },
+    email: {
+      type: String,
+      required: [true, '請輸入您的 Email'],
+      unique: true,
+      lowercase: true,
+      select: false
+    },
+    password: {
+      type: String,
+      required: [true, '請輸入您的 密碼'],
+      select: false
+    },
+    avator:{
+      type:String
+    },
+    coverImage:{
+      type:String
+    },
+    descroption:{
+      type:String,
+    },
+    tags:{
+      type:Array,
+    }
+  },
+  { versionKey: false }
+)
+
+const User = mongoose.model('User', userSchema)
+
+module.exports = User
