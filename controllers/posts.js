@@ -4,14 +4,82 @@ const User = require('../models/UsersModel')
 
 const postsControllers = {
   async getPosts(req, res) {
-    const post = await Post.find().populate({
-      path: 'author',
-      select: 'name avator',
-    }).populate({
-      path: 'comments',
-      populate: { path: 'commenter' },
-      }).sort({ createdAt: -1 })
-    successHandle(res, post)
+    const { sort } = req.query
+    if (sort == 'likes') {
+      const post = await Post.aggregate([
+        {
+          $project: {
+            author: 1,
+            content: 1,
+            comments: 1,
+            imageUrls: 1,
+            likes: 1,
+            createdAt: 1,
+            likesLength: {
+              $size: '$likes',
+            },
+          },
+        },
+        {
+          $sort: {
+            likesLength: -1,
+          },
+        },
+      ])
+      await Post.populate(post, {
+        path: 'author',
+        select: 'name avator',
+      })
+      await Post.populate(post, {
+        path: 'comments',
+        populate: { path: 'commenter' },
+      })
+
+      successHandle(res, post)
+    } else if (sort == 'comments') {
+      const post = await Post.aggregate([
+        {
+          $project: {
+            author: 1,
+            content: 1,
+            comments: 1,
+            imageUrls: 1,
+            likes: 1,
+            createdAt: 1,
+            commentsLength: {
+              $size: '$comments',
+            },
+          },
+        },
+        {
+          $sort: {
+            commentsLength: -1,
+          },
+        },
+      ])
+      await Post.populate(post, {
+        path: 'author',
+        select: 'name avator',
+      })
+      await Post.populate(post, {
+        path: 'comments',
+        populate: { path: 'commenter' },
+      })
+
+      successHandle(res, post)
+    } else {
+      const post = await Post.find()
+        .populate({
+          path: 'author',
+          select: 'name avator',
+        })
+        .populate({
+          path: 'comments',
+          populate: { path: 'commenter' },
+        })
+        .sort({ createdAt: -1 })
+      successHandle(res, post)
+    }
   },
 
   async addPosts(req, res) {
