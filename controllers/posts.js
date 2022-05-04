@@ -7,7 +7,10 @@ const postsControllers = {
     const post = await Post.find().populate({
       path: 'author',
       select: 'name avator',
-    })
+    }).populate({
+      path: 'comments',
+      populate: { path: 'commenter' },
+      }).sort({ createdAt: -1 })
     successHandle(res, post)
   },
 
