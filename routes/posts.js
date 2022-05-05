@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const mongoose = require('mongoose')
 const postsControllers = require('../controllers/posts')
 
 router.get('/', postsControllers.getPosts)

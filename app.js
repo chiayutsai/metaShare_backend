@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const cors = require('cors')
 const postsRouter = require('./routes/posts')
+const uploadImageRouter = require('./routes/uploadImage')
 
 require('./connections')
 
@@ -17,6 +18,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/api/posts', postsRouter)
+app.use('/api/uploadImage', uploadImageRouter)
 
 app.use((req, res, next) => {
   res.status(404).json({

@@ -4,13 +4,13 @@ const User = require('../models/UsersModel')
 
 const postsControllers = {
   async getPosts(req, res) {
-    const { sort,search } = req.query
-    const q = search !== undefined ? {"content": new RegExp(search)} : {};
-    
+    const { sort, search } = req.query
+    const q = search !== undefined ? { content: new RegExp(search) } : {}
+
     if (sort && sort !== 'news') {
       const post = await Post.aggregate([
         {
-          $match: q
+          $match: q,
         },
         {
           $project: {
@@ -21,7 +21,7 @@ const postsControllers = {
             likes: 1,
             createdAt: 1,
             length: {
-              $cond: { if: { $isArray: `$${sort}` }, then: { $size: `$${sort}` }, else: "NA"}
+              $cond: { if: { $isArray: `$${sort}` }, then: { $size: `$${sort}` }, else: 'NA' },
             },
           },
         },
@@ -39,9 +39,9 @@ const postsControllers = {
         path: 'comments',
         populate: { path: 'commenter' },
       })
-  
+
       successHandle(res, post)
-    }else {
+    } else {
       const post = await Post.find(q)
         .populate({
           path: 'author',
@@ -59,7 +59,11 @@ const postsControllers = {
   async addPosts(req, res) {
     try {
       const data = req.body
-      const post = await Post.create(req.body)
+      const post = await Post.create({
+        author: data.author,
+        content: data.content,
+        imageUrls: data.imageUrls,
+      })
       successHandle(res, post, '新增成功')
     } catch (error) {
       errorHandle(res, error, '欄位填寫不正確')
