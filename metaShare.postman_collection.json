@@ -1,0 +1,96 @@
+{
+	"info": {
+		"_postman_id": "1d0eb977-6bb5-496f-b99a-988ec55f9476",
+		"name": "metaShare",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "取得所有貼文",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mata-share-backend.herokuapp.com/api/posts",
+					"protocol": "https",
+					"host": [
+						"mata-share-backend",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "新增一筆貼文",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"author\":\"627100547ef69b72689e67f6\",\r\n    \"content\":\"測試內容\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://mata-share-backend.herokuapp.com/api/posts",
+					"protocol": "https",
+					"host": [
+						"mata-share-backend",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "上傳圖片",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "type",
+							"value": "file",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://mata-share-backend.herokuapp.com/api/uploadImage",
+					"protocol": "https",
+					"host": [
+						"mata-share-backend",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"uploadImage"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

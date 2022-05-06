@@ -59,12 +59,19 @@ const postsControllers = {
   async addPosts(req, res) {
     try {
       const data = req.body
-      const post = await Post.create({
-        author: data.author,
-        content: data.content,
-        imageUrls: data.imageUrls,
-      })
-      successHandle(res, post, '新增成功')
+      const id= data.author
+      const hasAuthor = await User.findById(id).exec()
+      if(hasAuthor){
+        const post = await Post.create({
+          author: data.author,
+          content: data.content,
+          imageUrls: data.imageUrls,
+        })
+        successHandle(res, post, '新增成功')
+      }else{
+        throw error
+      }
+     
     } catch (error) {
       errorHandle(res, error, '欄位填寫不正確')
     }
