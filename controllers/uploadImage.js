@@ -1,6 +1,5 @@
 const { ImgurClient } = require('imgur')
 const client = new ImgurClient({ clientId: process.env.CLIENT_ID })
-const fs = require('fs')
 const appError = require('../service/appError')
 const handleErrorAsync = require('../service/handleErrorAsync')
 const successHandle = require('../server/handle')
@@ -8,7 +7,7 @@ const successHandle = require('../server/handle')
 const uploadImageControllers = {
   uploadImage: handleErrorAsync(async (req, res, next) => {
     const response = await client.upload({
-      image: fs.createReadStream(req.file.path),
+      image: req.file.buffer,
       type: 'stream',
     })
     if (!response.success) {

@@ -5,15 +5,7 @@ const appError = require('../service/appError')
 const handleErrorAsync = require('../service/handleErrorAsync')
 
 // 設定 storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads')
-  },
-  // 設定檔案命名方式
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  },
-})
+const storage = multer.memoryStorage()
 
 const upload = multer({
   fileFilter(req, file, cb) {
