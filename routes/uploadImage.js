@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const appError = require('../service/appError')
+const handleErrorAsync = require('../service/handleErrorAsync')
+
 // 設定 storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -26,17 +28,20 @@ const upload = multer({
   storage,
 }).single('image')
 
-const checkUpload = (req, res, next) => {
+const checkUpload = handleErrorAsync(async (req, res, next) => {
   upload(req, res, async (err) => {
     if (err) {
       return next(appError(400, err.message))
     }
-    if (req.file.size > 1000000) {
+    if (!req.file) {
+      return next(appError(400, '請選擇一張圖片上傳'))
+    }
+    if (req.file?.size > 1000000) {
       return next(appError(400, '圖片檔案過大，僅限 1mb 以下檔案'))
     }
     next()
   })
-}
+})
 const uploadImageControllers = require('../controllers/uploadImage')
 
 router.post('/', checkUpload, uploadImageControllers.uploadImage)
