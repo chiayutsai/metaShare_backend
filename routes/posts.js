@@ -1,15 +1,10 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const router = express.Router()
 const postsControllers = require('../controllers/posts')
+const User = require('../models/UsersModel')
+const appError = require('../service/appError')
 
 router.get('/', postsControllers.getPosts)
-
-router.post('/', postsControllers.addPosts)
-
-router.delete('/', postsControllers.deleteAllPosts)
-
-router.delete('/:id', postsControllers.deletePost)
-
-router.patch('/:id', postsControllers.updatePost)
 
 module.exports = router

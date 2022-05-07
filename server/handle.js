@@ -1,17 +1,9 @@
-const successHandle = (res,data,message)=> {
+const successHandle = (res, data, message) => {
   res.status(200).json({
-    status:'success',
+    status: 'success',
     data,
-    message
-  });
+    message,
+  })
 }
 
-const errorHandle = (res,error,message) => {
-  res.status(400).json({
-    status:'false',
-    error,
-    message
-  });
-}
-
-module.exports = {successHandle, errorHandle}
+module.exports = successHandle

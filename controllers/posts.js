@@ -1,9 +1,11 @@
-const { successHandle, errorHandle } = require('../server/handle')
+const successHandle = require('../server/handle')
 const Post = require('../models/PostsModel')
 const User = require('../models/UsersModel')
+const handleErrorAsync = require('../service/handleErrorAsync')
+const mongoose = require('mongoose')
 
 const postsControllers = {
-  async getPosts(req, res) {
+  getPosts: handleErrorAsync(async (req, res, next) => {
     const { sort, search } = req.query
     const q = search !== undefined ? { content: new RegExp(search) } : {}
 
@@ -54,70 +56,12 @@ const postsControllers = {
         .sort({ createdAt: -1 })
       successHandle(res, post)
     }
-  },
+  }),
 
-  async addPosts(req, res) {
-    try {
-      const data = req.body
-      const id= data.author
-      const hasAuthor = await User.findById(id).exec()
-      if(hasAuthor){
-        const post = await Post.create({
-          author: data.author,
-          content: data.content,
-          imageUrls: data.imageUrls,
-        })
-        successHandle(res, post, '新增成功')
-      }else{
-        throw error
-      }
-     
-    } catch (error) {
-      errorHandle(res, error, '欄位填寫不正確')
-    }
-  },
-
-  async deleteAllPosts(req, res) {
-    try {
-      await Post.deleteMany({})
-      successHandle(res, [], '刪除全部成功')
-    } catch (error) {
-      errorHandle(res, error, error.message)
-    }
-  },
-
-  async deletePost(req, res) {
-    try {
-      const { id } = req.params
-      const post = await Post.findByIdAndDelete(id)
-      if (post) {
-        successHandle(res, post, '刪除成功')
-      } else {
-        throw new Error()
-      }
-    } catch (error) {
-      errorHandle(res, error, '查無此 id')
-    }
-  },
-
-  async updatePost(req, res) {
-    try {
-      const { id } = req.params
-      const data = req.body
-      const post = await Post.findByIdAndUpdate(
-        id,
-        { name: data.name, content: data.content, image: data.image, createdAt: data.createdAt, likes: data.likes },
-        { returnDocument: 'after' }
-      )
-      if (post) {
-        successHandle(res, post, '更新成功')
-      } else {
-        throw new Error('無此ID或欄位填寫錯誤')
-      }
-    } catch (error) {
-      errorHandle(res, error, '查無此 id')
-    }
-  },
+  deletePosts: handleErrorAsync(async (req, res, next) => {
+    await Post.deleteMany({})
+    successHandle(res, [], '刪除全部成功')
+  }),
 }
 
 module.exports = postsControllers
