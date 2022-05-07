@@ -21,12 +21,6 @@ const postControllers = {
   }),
 
   deletePost: handleErrorAsync(async (req, res, next) => {
-    const { id } = req.params
-    const isValidId = mongoose.Types.ObjectId.isValid(id)
-    if (!isValidId) {
-      return next(appError(400, '貼文 ID 格式錯誤，請重新確認'))
-    }
-
     const post = await Post.findByIdAndDelete(id)
 
     if (!post) {
@@ -36,12 +30,6 @@ const postControllers = {
   }),
 
   updatePost: handleErrorAsync(async (req, res, next) => {
-    const { id } = req.params
-    const isValidId = mongoose.Types.ObjectId.isValid(id)
-    if (!isValidId) {
-      return next(appError(400, '貼文 ID 格式錯誤，請重新確認'))
-    }
-
     const { content, imageUrls } = req.body
     if (!content && !imageUrls?.length) {
       return next(appError(400, '請輸入要更新的貼文內容或圖片'))
