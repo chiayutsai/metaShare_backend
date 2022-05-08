@@ -1,0 +1,1175 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "MetaShare Api",
+    "description": "MetaShare 相關 Api"
+  },
+  "host": "mata-share-backend.herokuapp.com",
+  "basePath": "/",
+  "tags": [],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions":{
+    "Bearer":{
+      "type": "apiKey",
+      "in": "headers",
+      "name": "Authorization",
+      "description": "JWT Token"
+    }
+  },
+  "consumes": [],
+  "produces": [],
+  "paths": {
+    "/api/user/": {
+      "get": {
+        "tags": ["User"],
+        "description": "取得全部使用者",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "tags": ["User"],
+        "description": "登入",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/user/register": {
+      "post": {
+        "tags": ["User"],
+        "description": "註冊",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/user/check": {
+      "post": {
+        "tags": ["User"],
+        "description": "檢查使用者是否登入",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/user/checkEmail": {
+      "post": {
+        "tags": ["User"],
+        "description": "取得驗證碼",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/user/verification": {
+      "post": {
+        "tags": ["User"],
+        "description": "驗證驗證碼",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/user/resetPassword": {
+      "patch": {
+        "tags": ["User"],
+        "description": "重設密碼",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/user/profile": {
+      "get": {
+        "tags": ["User"],
+        "description": "取得使用者資訊",
+        "parameters": [],
+        "responses": {}
+      },
+      "patch": {
+        "tags": ["User"],
+        "description": "修改使用者資訊",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/user/updatePassword": {
+      "patch": {
+        "tags": ["User"],
+        "description": "更新密碼",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/posts/": {
+      "get": {
+        "tags": ["Posts"],
+        "description": "取得全部貼文",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/postSuccessResponse"
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/post/{id}": {
+      "get": {
+        "tags": ["Post"],
+        "security":[{
+          "Bearer":[]
+        }],
+        "description": "取得單筆貼文",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/postSuccessResponse"
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/idFormatErrorResponse"
+            }
+          },
+          "400 (查無此 ID)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundIdErrorResponse"
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Post"],
+        "description": "刪除單筆貼文",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [{
+                    "_id": "62763cb70b6e444e6fd4fbbb",
+                    "author": {
+                      "_id": "627100547ef69b72689e67f6",
+                      "name": "Chia Yu",
+                      "avator": "https://imgur.com/LwPqBcI.png"
+                    },
+                    "content": "123",
+                    "imageUrls": [],
+                    "likes": [],
+                    "createdAt": "2022-05-07T09:32:39.272Z",
+                    "comments": []
+                  }]
+                },
+                "message": {
+                  "type": "string",
+                  "example": "刪除成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/idFormatErrorResponse"
+            }
+          },
+          "400 (查無此 ID)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundIdErrorResponse"
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Post"],
+        "description": "更新單筆貼文",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },{
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "author": {
+                  "type": "string",
+                  "example": "627100547ef69b72689e67f6"
+                },
+                "content": {
+                  "type": "string",
+                  "example": "更新內容"
+                },
+                "imageUrls": {
+                  "type": "array",
+                  "example": [
+                    "https://i.imgur.com/L7EzN1j.png"
+                  ]
+                }
+              },
+              "required": [
+                "author"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [{
+                    "_id": "62763cb70b6e444e6fd4fbbb",
+                    "author": {
+                      "_id": "627100547ef69b72689e67f6",
+                      "name": "Chia Yu",
+                      "avator": "https://imgur.com/LwPqBcI.png"
+                    },
+                    "content": "更新內容",
+                    "imageUrls": [],
+                    "likes": [],
+                    "createdAt": "2022-05-07T09:32:39.272Z",
+                    "comments": []
+                  }]
+                },
+                "message": {
+                  "type": "string",
+                  "example": "更新成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (沒有更新內容)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "請輸入要更新的貼文內容或圖片"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/idFormatErrorResponse"
+            }
+          },
+          "400 (查無此 ID)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundIdErrorResponse"
+            }
+          },
+          "400 (使用者ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/userIdFormatErrorResponse"
+            }
+          },
+          "400 (查無此使用者)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundUserErrorResponse"
+            }
+          },
+          "400 (使用者無權限)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "此使用者沒有更新這則貼文的權限"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/post/{id}/likes": {
+      "get": {
+        "tags": ["Post"],
+        "description": "取得單則貼文喜歡的人",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [ {
+                    "_id": "627100547ef69b72689e67f6",
+                    "name": "Chia Yu",
+                    "avator": "https://imgur.com/LwPqBcI.png"
+                }]
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/idFormatErrorResponse"
+            }
+          },
+          "400 (查無此 ID)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundIdErrorResponse"
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Post"],
+        "description": "喜歡/收回喜歡",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },{
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "author": {
+                  "type": "string",
+                  "example": "627100547ef69b72689e67f6"
+                }
+              },
+              "required": [
+                "author"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [{
+                    "_id": "62763cb70b6e444e6fd4fbbb",
+                    "author": {
+                      "_id": "627100547ef69b72689e67f6",
+                      "name": "Chia Yu",
+                      "avator": "https://imgur.com/LwPqBcI.png"
+                    },
+                    "content": "更新內容",
+                    "imageUrls": [],
+                    "likes": [
+                      "627100547ef69b72689e67f6"
+                    ],
+                    "createdAt": "2022-05-07T09:32:39.272Z",
+                    "comments": []
+                  }]
+                },
+                "message": {
+                  "type": "string",
+                  "example": "更新成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/idFormatErrorResponse"
+            }
+          },
+          "400 (查無此 ID)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundIdErrorResponse"
+            }
+          },
+          "400 (使用者ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/userIdFormatErrorResponse"
+            }
+          },
+          "400 (查無此使用者)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundUserErrorResponse"
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/post/{id}/comments": {
+      "get": {
+        "tags": ["Post"],
+        "description": "取得單則貼文的留言",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [{
+                    "commenter": {
+                      "_id": "627100a67ef69b72689e67f7",
+                      "name": "Amy Lin",
+                      "avator": "https://imgur.com/m9p1N0H.png"
+                    },
+                    "content": "哈哈",
+                    "createdAt": "2022-05-04T10:20:06.167Z"
+                  },
+                  {
+                    "commenter": {
+                      "_id": "627100547ef69b72689e67f6",
+                      "name": "Chia Yu",
+                      "avator": "https://imgur.com/LwPqBcI.png"
+                    },
+                    "content": "笑屁喔",
+                    "createdAt": "2022-05-05T10:20:06.167Z"
+                  }]
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/idFormatErrorResponse"
+            }
+          },
+          "400 (查無此 ID)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundIdErrorResponse"
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Post"],
+        "description": "新增留言",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },{
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "author": {
+                  "type": "string",
+                  "example": "627100547ef69b72689e67f6"
+                },
+                "content": {
+                  "type": "string",
+                  "example": "留言內容"
+                }
+              },
+              "required": [
+                "author",
+                "content"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [{
+                    "_id": "62763a35b90092b5356055ab",
+                    "author": "627100547ef69b72689e67f6",
+                    "content": "更新內容2",
+                    "imageUrls": [
+                        "https://i.imgur.com/L7EzN1j.png"
+                    ],
+                    "likes": [],
+                    "createdAt": "2022-05-07T09:21:57.477Z",
+                    "comments": [
+                        {
+                            "commenter": "627100547ef69b72689e67f6",
+                            "content": "留言",
+                            "createdAt": "2022-05-08T09:40:42.081Z",
+                            "_id": "6277901ac3db681a968b7c65"
+                        }
+                    ]
+                }]
+                },
+                "message": {
+                  "type": "string",
+                  "example": "留言成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (沒有留言內容)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "請輸入留言內容"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/idFormatErrorResponse"
+            }
+          },
+          "400 (查無此 ID)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundIdErrorResponse"
+            }
+          },
+          "400 (使用者ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/userIdFormatErrorResponse"
+            }
+          },
+          "400 (查無此使用者)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundUserErrorResponse"
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/post/": {
+      "post": {
+        "tags": ["Post"],
+        "description": "新增貼文",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "author": {
+                  "type": "string",
+                  "example": "627100547ef69b72689e67f6"
+                },
+                "content": {
+                  "type": "string",
+                  "example": "貼文內容"
+                },
+                "imageUrls": {
+                  "type": "array",
+                  "example": [
+                    "https://i.imgur.com/L7EzN1j.png"
+                  ]
+                }
+              },
+              "required": [
+                "author"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [{
+                    "_id": "62763cb70b6e444e6fd4fbbb",
+                    "author": {
+                      "_id": "627100547ef69b72689e67f6",
+                      "name": "Chia Yu",
+                      "avator": "https://imgur.com/LwPqBcI.png"
+                    },
+                    "content": "更新內容",
+                    "imageUrls": [],
+                    "likes": [],
+                    "createdAt": "2022-05-07T09:32:39.272Z",
+                    "comments": []
+                  }]
+                },
+                "message": {
+                  "type": "string",
+                  "example": "更新成功"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (沒有貼文內容)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "請輸入貼文內容或上傳一張圖片"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (使用者ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/userIdFormatErrorResponse"
+            }
+          },
+          "400 (查無此使用者)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundUserErrorResponse"
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/stories/": {
+      "get": {
+        "tags": ["stories"],
+        "description": "取得全部限時動態",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/story/": {
+      "post": {
+        "tags": ["story"],
+        "description": "新增單筆限時動態",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/story/{id}": {
+      "delete": {
+        "tags": ["story"],
+        "description": "刪除單筆限時動態",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/likesPost/{id}": {
+      "get": {
+        "tags": ["likesPost"],
+        "description": "取得使用者喜歡的貼文列表",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/follow/{id}": {
+      "get": {
+        "tags": ["follow"],
+        "description": "取得追蹤名單/被誰追蹤",
+        "parameters": [],
+        "responses": {}
+      },
+      "patch": {
+        "tags": ["follow"],
+        "description": "更新追蹤名單/被誰追蹤",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/uploadImage/": {
+      "post": {
+        "tags": ["uploadImage"],
+        "description": "上傳圖片",
+        "security":[{
+          "Bearer":[]
+        }],
+        "consumes":["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "type": "string",
+                  "format": "binary"
+              }
+              },
+              "required": [
+                "image"
+              ]
+            }
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "example":  {
+                    "imageUrl": "https://i.imgur.com/nPlGaBz.png"
+                }
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (檔案類型錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "圖片格式錯誤，僅限 JPG、PNG、JPEG 圖片"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (檔案過大)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "圖片檔案過大，僅限 1mb 以下檔案"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (未選擇圖片上傳)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "請選擇一張圖片上傳"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (上傳失敗)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "傳失敗，請重新上傳"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "postSuccessResponse":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "array",
+          "example": [{
+            "_id": "62763cb70b6e444e6fd4fbbb",
+            "author": {
+              "_id": "627100547ef69b72689e67f6",
+              "name": "Chia Yu",
+              "avator": "https://imgur.com/LwPqBcI.png"
+            },
+            "content": "123",
+            "imageUrls": [],
+            "likes": [],
+            "createdAt": "2022-05-07T09:32:39.272Z",
+            "comments": []
+          }]
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
+    "idFormatErrorResponse":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "貼文 ID 格式錯誤，請重新確認"
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
+    "userIdFormatErrorResponse":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "請輸入正確的使用者 ID"
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
+    "notFoundIdErrorResponse":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "查無此篇貼文，貼文已不存在"
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
+    "notFoundUserErrorResponse":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "無此用戶，請重新登入"
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
+    "errorResponse":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "系統錯誤，請洽系統管理員"
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    }
+  }
+}

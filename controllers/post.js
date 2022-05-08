@@ -55,7 +55,12 @@ const postControllers = {
 
   updatePost: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
-    const { content, imageUrls } = req.body
+    const { author, content, imageUrls } = req.body
+    const findPost = await Post.findById(id)
+    const postAuthorId = findPost.author.toString()
+    if (author !== postAuthorId) {
+      return next(appError(400, '此使用者沒有更新這則貼文的權限'))
+    }
     if (!content && !imageUrls?.length) {
       return next(appError(400, '請輸入要更新的貼文內容或圖片'))
     }
@@ -94,9 +99,10 @@ const postControllers = {
       content,
       createdAt: Date.now(),
     }
+    console.log(data)
     const post = await Post.findByIdAndUpdate(id, { $push: { comments: data } }, { returnDocument: 'after' })
 
-    successHandle(res, post, '更新成功')
+    successHandle(res, post, '留言成功')
   }),
 }
 

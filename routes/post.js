@@ -42,7 +42,7 @@ router.post('/', checkPostAuthor, postControllers.addPost)
 
 router.delete('/:id', checkPostId, postControllers.deletePost)
 
-router.patch('/:id', checkPostId, postControllers.updatePost)
+router.patch('/:id', checkPostId, checkPostAuthor, postControllers.updatePost)
 
 router.patch('/:id/likes', checkPostId, checkPostAuthor, postControllers.updatePostLikes)
 

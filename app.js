@@ -3,6 +3,8 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const cors = require('cors')
+const swaggerUI = require('swagger-ui-express')
+const swaggerFile = require('./swagger-output.json')
 const userRouter = require('./routes/user')
 const postsRouter = require('./routes/posts')
 const postRouter = require('./routes/post')
@@ -43,6 +45,8 @@ app.use('/api/story', storyRouter)
 app.use('/api/likesPost', likesPostRouter)
 app.use('/api/follow', followRouter)
 app.use('/api/uploadImage', uploadImageRouter)
+
+app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(swaggerFile))
 
 app.use((req, res, next) => {
   res.status(404).json({
