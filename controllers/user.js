@@ -81,6 +81,9 @@ const userControllers = {
     }
 
     const user = await User.findOne({ email }).select('+password')
+    if (!user) {
+      return next(appError(400, '此 E-mail 尚未註冊'))
+    }
     const auth = await bcrypt.compare(password, user.password)
     if (!auth) {
       return next(appError(400, '輸入的密碼不正確'))
