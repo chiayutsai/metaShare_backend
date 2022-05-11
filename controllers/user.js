@@ -111,21 +111,22 @@ const userControllers = {
       userId: user._id,
       verification: Math.floor(Math.random() * 9000) + 1000,
     })
-    //successHandle(res, '寄送驗證碼至此 E-mail')
-    generateSendJWT(user, res, true)
+    successHandle(res, '寄送驗證碼至此 E-mail')
   }),
 
   verification: handleErrorAsync(async (req, res, next) => {
+    const inputEmail = req.body.email
     const inputVerification = req.body.verification
     if (!inputVerification) {
       return next(appError(400, '請輸入收到的驗證碼！'))
     }
-    const { verification } = await Verification.findOne({ userId: req.user._id })
+    const user = await User.findOne({ email: inputEmail })
+    const { verification } = await Verification.findOne({ userId: user._id })
+
     if (inputVerification !== verification) {
       return next(appError(400, '驗證碼輸入錯誤，請重新輸入'))
     }
-
-    successHandle(res, '驗證成功')
+    generateSendJWT(user, res, true)
   }),
 
   resetPassword: handleErrorAsync(async (req, res, next) => {

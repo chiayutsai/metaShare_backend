@@ -7,7 +7,7 @@ const User = require('../models/UsersModel')
 
 const generateSendJWT = (user, res, isResetPassword) => {
   // 產生 JWT token
-  const token = jwt.sign({ id: user._id, name: user.name, isResetPassword }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: user._id, isResetPassword }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_DAY,
   })
 

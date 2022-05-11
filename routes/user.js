@@ -10,7 +10,7 @@ router.post('/login', userControllers.logIn)
 router.get('/check', isAuth, userControllers.check)
 
 router.post('/checkEmail', userControllers.checkEmail)
-router.post('/verification', verificationAuth, userControllers.verification)
+router.post('/verification', userControllers.verification)
 router.patch('/resetPassword', verificationAuth, userControllers.resetPassword)
 
 router.get('/profile', userControllers.getProfile)
