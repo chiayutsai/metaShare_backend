@@ -5,6 +5,7 @@ const postControllers = require('../controllers/post')
 const Post = require('../models/PostsModel')
 const User = require('../models/UsersModel')
 const appError = require('../service/appError')
+const { isAuth } = require('../service/auth')
 
 const checkPostId = async (req, res, next) => {
   const { id } = req.params
@@ -19,32 +20,19 @@ const checkPostId = async (req, res, next) => {
   next()
 }
 
-const checkPostAuthor = async (req, res, next) => {
-  const authorId = req.body.author
-  const isValidId = mongoose.Types.ObjectId.isValid(authorId)
-  if (!isValidId) {
-    return next(appError(400, '請輸入正確的使用者 ID'))
-  }
-  const hasAuthor = await User.findById(authorId).exec()
-  if (!hasAuthor) {
-    return next(appError(400, '無此用戶，請重新登入'))
-  }
-  next()
-}
+router.get('/:id', isAuth, checkPostId, postControllers.getPost)
 
-router.get('/:id', checkPostId, postControllers.getPost)
+router.get('/:id/likes', isAuth, checkPostId, postControllers.getPostLikes)
 
-router.get('/:id/likes', checkPostId, postControllers.getPostLikes)
+router.get('/:id/comments', isAuth, checkPostId, postControllers.getPostComments)
 
-router.get('/:id/comments', checkPostId, postControllers.getPostComments)
+router.post('/', isAuth, postControllers.addPost)
 
-router.post('/', checkPostAuthor, postControllers.addPost)
+router.delete('/:id', isAuth, checkPostId, postControllers.deletePost)
 
-router.delete('/:id', checkPostId, postControllers.deletePost)
+router.patch('/:id', isAuth, checkPostId, postControllers.updatePost)
 
-router.patch('/:id', checkPostId, checkPostAuthor, postControllers.updatePost)
+router.patch('/:id/likes', isAuth, checkPostId, postControllers.updatePostLikes)
 
-router.patch('/:id/likes', checkPostId, checkPostAuthor, postControllers.updatePostLikes)
-
-router.patch('/:id/comments', checkPostId, checkPostAuthor, postControllers.updatePostComments)
+router.patch('/:id/comments', isAuth, checkPostId, postControllers.updatePostComments)
 module.exports = router

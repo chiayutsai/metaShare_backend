@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
 const validator = require('validator')
 const successHandle = require('../server/handle')
 const User = require('../models/UsersModel')
@@ -10,18 +9,7 @@ const Follow = require('../models/FollowModel')
 const appError = require('../service/appError')
 const handleErrorAsync = require('../service/handleErrorAsync')
 const mongoose = require('mongoose')
-
-const generateSendJWT = (user, res, isResetPassword) => {
-  // 產生 JWT token
-  const token = jwt.sign({ id: user._id, name: user.name, isResetPassword }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_DAY,
-  })
-  const newUser = {
-    name: user.name,
-    token,
-  }
-  successHandle(res, newUser)
-}
+const { generateSendJWT } = require('../service/auth')
 
 const userControllers = {
   getAllUsers: handleErrorAsync(async (req, res, next) => {
@@ -82,17 +70,22 @@ const userControllers = {
 
     const user = await User.findOne({ email }).select('+password')
     if (!user) {
-      return next(appError(400, '此 E-mail 尚未註冊'))
+      return next(appError(400, '輸入的帳號或密碼不正確'))
     }
     const auth = await bcrypt.compare(password, user.password)
     if (!auth) {
-      return next(appError(400, '輸入的密碼不正確'))
+      return next(appError(400, '輸入的帳號或密碼不正確'))
     }
     generateSendJWT(user, res, false)
   }),
 
   check: handleErrorAsync(async (req, res, next) => {
-    successHandle(res, req.user)
+    const user = {
+      id: req.user._id,
+      name: req.user.name,
+      avator: req.user.avator,
+    }
+    successHandle(res, user)
   }),
 
   checkEmail: handleErrorAsync(async (req, res, next) => {

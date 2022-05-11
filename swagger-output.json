@@ -4,7 +4,7 @@
     "title": "MetaShare Api",
     "description": "MetaShare 相關 Api"
   },
-  "host": "mata-share-backend.herokuapp.com",
+  "host": "127.0.0.1:3000",
   "basePath": "/",
   "tags": [],
   "schemes": [
@@ -47,9 +47,12 @@
       }
     },
     "/api/user/check": {
-      "post": {
+      "get": {
         "tags": ["User"],
         "description": "檢查使用者是否登入",
+        "security":[{
+          "Bearer":[]
+        }],
         "parameters": [],
         "responses": {}
       }
@@ -257,10 +260,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "author": {
-                  "type": "string",
-                  "example": "627100547ef69b72689e67f6"
-                },
                 "content": {
                   "type": "string",
                   "example": "更新內容"
@@ -271,10 +270,7 @@
                     "https://i.imgur.com/L7EzN1j.png"
                   ]
                 }
-              },
-              "required": [
-                "author"
-              ]
+              }
             },
             "type": "string"
             }
@@ -347,16 +343,10 @@
               "$ref":"#/definitions/notFoundIdErrorResponse"
             }
           },
-          "400 (使用者ID 格式錯誤)": {
+          "400 (尚未登入)": {
             "description": "失敗回應",
             "schema": {
-              "$ref":"#/definitions/userIdFormatErrorResponse"
-            }
-          },
-          "400 (查無此使用者)": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/notFoundUserErrorResponse"
+              "$ref":"#/definitions/userIdErrorResponse"
             }
           },
           "400 (使用者無權限)": {
@@ -459,25 +449,7 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },{
-            "name": "obj",
-            "in": "body",
-            "description": "資料格式",
-            "required":true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "author": {
-                  "type": "string",
-                  "example": "627100547ef69b72689e67f6"
-                }
-              },
-              "required": [
-                "author"
-              ]
-            },
-            "type": "string"
-            }
+          }
         ],
         "responses": {
           "200": {
@@ -529,16 +501,10 @@
               "$ref":"#/definitions/notFoundIdErrorResponse"
             }
           },
-          "400 (使用者ID 格式錯誤)": {
+          "400 (尚未登入)": {
             "description": "失敗回應",
             "schema": {
-              "$ref":"#/definitions/userIdFormatErrorResponse"
-            }
-          },
-          "400 (查無此使用者)": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/notFoundUserErrorResponse"
+              "$ref":"#/definitions/userIdErrorResponse"
             }
           },
           "400": {
@@ -642,17 +608,12 @@
             "schema": {
               "type": "object",
               "properties": {
-                "author": {
-                  "type": "string",
-                  "example": "627100547ef69b72689e67f6"
-                },
                 "content": {
                   "type": "string",
                   "example": "留言內容"
                 }
               },
               "required": [
-                "author",
                 "content"
               ]
             },
@@ -732,16 +693,10 @@
               "$ref":"#/definitions/notFoundIdErrorResponse"
             }
           },
-          "400 (使用者ID 格式錯誤)": {
+          "400 (尚未登入)": {
             "description": "失敗回應",
             "schema": {
-              "$ref":"#/definitions/userIdFormatErrorResponse"
-            }
-          },
-          "400 (查無此使用者)": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/notFoundUserErrorResponse"
+              "$ref":"#/definitions/userIdErrorResponse"
             }
           },
           "400": {
@@ -769,10 +724,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "author": {
-                  "type": "string",
-                  "example": "627100547ef69b72689e67f6"
-                },
                 "content": {
                   "type": "string",
                   "example": "貼文內容"
@@ -783,10 +734,7 @@
                     "https://i.imgur.com/L7EzN1j.png"
                   ]
                 }
-              },
-              "required": [
-                "author"
-              ]
+              }
             },
             "type": "string"
             }
@@ -847,16 +795,10 @@
               }
             }
           },
-          "400 (使用者ID 格式錯誤)": {
+          "400 (尚未登入)": {
             "description": "失敗回應",
             "schema": {
-              "$ref":"#/definitions/userIdFormatErrorResponse"
-            }
-          },
-          "400 (查無此使用者)": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/notFoundUserErrorResponse"
+              "$ref":"#/definitions/userIdErrorResponse"
             }
           },
           "400": {
@@ -1103,7 +1045,7 @@
         "name": "main"
       }
     },
-    "userIdFormatErrorResponse":{
+    "userIdErrorResponse":{
       "type": "object",
       "properties": {
         "status": {
@@ -1112,7 +1054,7 @@
         },
         "message": {
           "type": "string",
-          "example": "請輸入正確的使用者 ID"
+          "example": "認證失敗，請重新登入"
         }
       
       },
@@ -1130,23 +1072,6 @@
         "message": {
           "type": "string",
           "example": "查無此篇貼文，貼文已不存在"
-        }
-      
-      },
-      "xml": {
-        "name": "main"
-      }
-    },
-    "notFoundUserErrorResponse":{
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": false
-        },
-        "message": {
-          "type": "string",
-          "example": "無此用戶，請重新登入"
         }
       
       },

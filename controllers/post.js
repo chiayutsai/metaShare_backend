@@ -40,7 +40,7 @@ const postControllers = {
     }
     const data = req.body
     const post = await Post.create({
-      author: data.author,
+      author: req.user.id,
       content: data.content,
       imageUrls: data.imageUrls,
     })
@@ -55,10 +55,10 @@ const postControllers = {
 
   updatePost: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
-    const { author, content, imageUrls } = req.body
+    const { content, imageUrls } = req.body
     const findPost = await Post.findById(id)
     const postAuthorId = findPost.author.toString()
-    if (author !== postAuthorId) {
+    if (req.user.id !== postAuthorId) {
       return next(appError(400, '此使用者沒有更新這則貼文的權限'))
     }
     if (!content && !imageUrls?.length) {
@@ -72,34 +72,33 @@ const postControllers = {
 
   updatePostLikes: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
-    const authorId = req.body.author
-    const isLike = await Post.find({ _id: id, likes: { $in: [authorId] } })
+    const userId = req.user.id
+    const isLike = await Post.find({ _id: id, likes: { $in: [userId] } })
     let method = ''
     if (isLike.length) {
       method = '$pull'
     } else {
       method = '$push'
     }
-    const post = await Post.findByIdAndUpdate(id, { [method]: { likes: authorId } }, { returnDocument: 'after' })
+    const post = await Post.findByIdAndUpdate(id, { [method]: { likes: userId } }, { returnDocument: 'after' })
 
-    await LikesPost.findOneAndUpdate({ userId: authorId }, { [method]: { posts: id } }, { returnDocument: 'after' })
+    await LikesPost.findOneAndUpdate({ userId: userId }, { [method]: { posts: id } }, { returnDocument: 'after' })
 
     successHandle(res, post, '更新成功')
   }),
 
   updatePostComments: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
-    const authorId = req.body.author
+    const userId = req.body.author
     const { content } = req.body
     if (!content) {
       return next(appError(400, '請輸入留言內容'))
     }
     const data = {
-      commenter: authorId,
+      commenter: userId,
       content,
       createdAt: Date.now(),
     }
-    console.log(data)
     const post = await Post.findByIdAndUpdate(id, { $push: { comments: data } }, { returnDocument: 'after' })
 
     successHandle(res, post, '留言成功')
