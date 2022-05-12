@@ -5,8 +5,7 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "start:dev": "NODE_ENV=dev nodemon ./bin/www",
-    "start:prod": "NODE_ENV=production nodemon ./bin/www",
-    "email": "node ./service/email"
+    "start:prod": "NODE_ENV=production nodemon ./bin/www"
   },
   "engines": {
     "node": "v16.x"
