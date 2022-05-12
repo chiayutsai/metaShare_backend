@@ -8,7 +8,7 @@ const verificationSchema = new mongoose.Schema(
       required: [true, 'User ID 未填寫'],
     },
     verification: {
-      type: Number,
+      type: String,
       required: [true, 'verification必須有值'],
     },
   },

@@ -102,17 +102,18 @@ const userControllers = {
       return next(appError(400, 'Email 格式不正確'))
     }
 
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email }).select('+email')
     if (!user) {
       return next(appError(400, '此 E-mail 尚未註冊'))
     }
+
     await Verification.findOneAndDelete({ userId: user._id })
 
-    const {verification} = await Verification.create({
+    const { verification } = await Verification.create({
       userId: user._id,
-      verification: Math.floor(Math.random() * 9000) + 1000,
+      verification: (Math.floor(Math.random() * 9000) + 1000).toString(),
     })
-    sendEmail(user,verification,res)
+    sendEmail(user, verification, res, next)
   }),
 
   verification: handleErrorAsync(async (req, res, next) => {
@@ -146,7 +147,7 @@ const userControllers = {
     }
 
     if (password !== confirmPassword) {
-      return next(appError('400', '密碼輸入不一致！', next))
+      return next(appError(400, '密碼輸入不一致！', next))
     }
 
     const newPassword = await bcrypt.hash(password, 12)

@@ -1,21 +1,23 @@
-
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer')
 const successHandle = require('../server/handle')
-const sendEmail = (user,verification,res) => {
+const appError = require('../service/appError')
+
+const sendEmail = (user, verification, res, next) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
     auth: {
-      user: 'c85771029@gmail.com',
-      pass: 'fzeqabxvbxemotkx',
+      user: process.env.NODE_MAILER,
+      pass: process.env.NODE_MAILER_PASSWORD,
     },
-  });
-  const array = verification.toString().split('')
-  transporter.sendMail({
-    from: 'c85771029@gmail.com',
-    to: 'c85771029@gmail.com',
-    subject: 'MetaShare - 密碼重置驗證碼',
-    html: `<div>
+  })
+  const array = verification.split('')
+  transporter
+    .sendMail({
+      from: process.env.NODE_MAILER,
+      to: user.email,
+      subject: 'MetaShare - 密碼重置驗證碼',
+      html: `<div>
 
     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0e4f3">
       <tbody>
@@ -51,11 +53,14 @@ const sendEmail = (user,verification,res) => {
           </td>
         </tr>
       </tbody>
-    </table></div>`
-  }).then(info => {
-    console.log({ info });
-    successHandle(res, [], '寄送驗證碼至Email')
-  }).catch(console.error);
+    </table></div>`,
+    })
+    .then((info) => {
+      successHandle(res, [], '寄送驗證碼至Email')
+    })
+    .catch(() => {
+      next(appError(400, '請重新申請驗證碼或聯絡管理者'))
+    })
 }
 
 module.exports = sendEmail
