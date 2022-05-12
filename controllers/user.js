@@ -10,6 +10,7 @@ const appError = require('../service/appError')
 const handleErrorAsync = require('../service/handleErrorAsync')
 const mongoose = require('mongoose')
 const { generateSendJWT } = require('../service/auth')
+const sendEmail = require('../service/email')
 
 const userControllers = {
   getAllUsers: handleErrorAsync(async (req, res, next) => {
@@ -107,11 +108,11 @@ const userControllers = {
     }
     await Verification.findOneAndDelete({ userId: user._id })
 
-    await Verification.create({
+    const {verification} = await Verification.create({
       userId: user._id,
       verification: Math.floor(Math.random() * 9000) + 1000,
     })
-    successHandle(res, '寄送驗證碼至此 E-mail')
+    sendEmail(user,verification,res)
   }),
 
   verification: handleErrorAsync(async (req, res, next) => {
