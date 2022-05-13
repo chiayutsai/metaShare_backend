@@ -7,6 +7,59 @@ const handleErrorAsync = require('../service/handleErrorAsync')
 const mongoose = require('mongoose')
 
 const postControllers = {
+  getPosts: handleErrorAsync(async (req, res, next) => {
+    const { sort, search } = req.query
+    const q = search !== undefined ? { content: new RegExp(search) } : {}
+
+    if (sort && sort !== 'news') {
+      const post = await Post.aggregate([
+        {
+          $match: q,
+        },
+        {
+          $project: {
+            author: 1,
+            content: 1,
+            comments: 1,
+            imageUrls: 1,
+            likes: 1,
+            createdAt: 1,
+            length: {
+              $cond: { if: { $isArray: `$${sort}` }, then: { $size: `$${sort}` }, else: 'NA' },
+            },
+          },
+        },
+        {
+          $sort: {
+            length: -1,
+          },
+        },
+      ])
+      await Post.populate(post, {
+        path: 'author',
+        select: 'name avator',
+      })
+      await Post.populate(post, {
+        path: 'comments',
+        populate: { path: 'commenter' },
+      })
+
+      successHandle(res, post)
+    } else {
+      const post = await Post.find(q)
+        .populate({
+          path: 'author',
+          select: 'name avator',
+        })
+        .populate({
+          path: 'comments',
+          populate: { path: 'commenter' },
+        })
+        .sort({ createdAt: -1 })
+      successHandle(res, post)
+    }
+  }),
+
   getPost: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
     const post = await Post.findById(id)
@@ -46,7 +99,10 @@ const postControllers = {
     })
     successHandle(res, post, '新增成功')
   }),
-
+  deletePosts: handleErrorAsync(async (req, res, next) => {
+    await Post.deleteMany({})
+    successHandle(res, [], '刪除全部成功')
+  }),
   deletePost: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
     const post = await Post.findByIdAndDelete(id)

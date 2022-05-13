@@ -20,19 +20,20 @@ const checkPostId = async (req, res, next) => {
   next()
 }
 
-router.get('/:id', isAuth, checkPostId, postControllers.getPost)
+router.get('/posts', isAuth, postControllers.getPosts)
+router.get('/post/:id', isAuth, checkPostId, postControllers.getPost)
 
-router.get('/:id/likes', isAuth, checkPostId, postControllers.getPostLikes)
+router.get('/post/:id/likes', isAuth, checkPostId, postControllers.getPostLikes)
 
-router.get('/:id/comments', isAuth, checkPostId, postControllers.getPostComments)
+router.get('/post/:id/comments', isAuth, checkPostId, postControllers.getPostComments)
 
-router.post('/', isAuth, postControllers.addPost)
+router.post('/post/', isAuth, postControllers.addPost)
 
-router.delete('/:id', isAuth, checkPostId, postControllers.deletePost)
+router.delete('/post/:id', isAuth, checkPostId, postControllers.deletePost)
 
-router.patch('/:id', isAuth, checkPostId, postControllers.updatePost)
+router.patch('/post/:id', isAuth, checkPostId, postControllers.updatePost)
 
-router.patch('/:id/likes', isAuth, checkPostId, postControllers.updatePostLikes)
+router.patch('/post/:id/likes', isAuth, checkPostId, postControllers.updatePostLikes)
 
-router.patch('/:id/comments', isAuth, checkPostId, postControllers.updatePostComments)
+router.patch('/post/:id/comments', isAuth, checkPostId, postControllers.updatePostComments)
 module.exports = router

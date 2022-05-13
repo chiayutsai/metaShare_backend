@@ -81,12 +81,7 @@ const userControllers = {
   }),
 
   check: handleErrorAsync(async (req, res, next) => {
-    const user = {
-      id: req.user._id,
-      name: req.user.name,
-      avator: req.user.avator,
-    }
-    successHandle(res, user)
+    generateSendJWT(req.user, res, false)
   }),
 
   checkEmail: handleErrorAsync(async (req, res, next) => {
@@ -147,7 +142,7 @@ const userControllers = {
     }
 
     if (password !== confirmPassword) {
-      return next(appError(400, '密碼輸入不一致！', next))
+      return next(appError(400, '密碼輸入不一致！'))
     }
 
     const newPassword = await bcrypt.hash(password, 12)
@@ -159,13 +154,49 @@ const userControllers = {
   }),
 
   getProfile: handleErrorAsync(async (req, res, next) => {
-    successHandle(res, '取得使用者資訊')
+    const { _id } = req.user
+    const profile = await Profile.findOne({ userId: _id })
+    let userProfile = {}
+    if (!profile) {
+      userProfile = await Profile.create({ userId: _id })
+    } else {
+      userProfile = profile
+    }
+    successHandle(res, profile, '取得使用者資訊')
   }),
   updateProfile: handleErrorAsync(async (req, res, next) => {
-    successHandle(res, '更新使用者資訊')
+    const { _id } = req.user
+    const { coverImage, coverImageBlur, description, tags } = req.body
+    if (!coverImage && !coverImageBlur && !description && !tags) {
+      return next(appError(400, '請輸入要更新的資訊'))
+    }
+    const profile = await Profile.findOneAndUpdate({ userId: _id }, { coverImage, coverImageBlur, description, tags }, { returnDocument: 'after' })
+    successHandle(res, profile, '更新成功')
   }),
   updatePassword: handleErrorAsync(async (req, res, next) => {
-    successHandle(res, '更新使用者密碼')
+    const { password, confirmPassword } = req.body
+    if (!password || !confirmPassword) {
+      return next(appError(400, '欄位未正確填寫！'))
+    }
+    // 密碼至少要 8 碼以上
+    if (!validator.isLength(password, { min: 8 })) {
+      return next(appError(400, '密碼字數低於 8 碼'))
+    }
+
+    // 密碼需英數混合
+    if (validator.isNumeric(password) || validator.isAlpha(password)) {
+      return next(appError(400, '密碼需英數混合'))
+    }
+
+    if (password !== confirmPassword) {
+      return next(appError(400, '密碼輸入不一致！'))
+    }
+    const newPassword = await bcrypt.hash(password, 12)
+
+    await User.findByIdAndUpdate(req.user._id, {
+      password: newPassword,
+    })
+    successHandle(res, [], '密碼更新成功')
   }),
 }
 

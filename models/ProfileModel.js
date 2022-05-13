@@ -10,6 +10,9 @@ const profileSchema = new mongoose.Schema(
     coverImage: {
       type: String,
     },
+    coverImageBlur: {
+      type: Boolean,
+    },
     description: {
       type: String,
     },

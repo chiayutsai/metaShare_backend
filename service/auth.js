@@ -81,4 +81,5 @@ const verificationAuth = handleErrorAsync(async (req, res, next) => {
     next()
   }
 })
+
 module.exports = { generateSendJWT, verificationAuth, isAuth }

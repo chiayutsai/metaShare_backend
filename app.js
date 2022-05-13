@@ -6,7 +6,6 @@ const cors = require('cors')
 const swaggerUI = require('swagger-ui-express')
 const swaggerFile = require('./swagger-output.json')
 const userRouter = require('./routes/user')
-const postsRouter = require('./routes/posts')
 const postRouter = require('./routes/post')
 const storiesRouter = require('./routes/stories')
 const storyRouter = require('./routes/story')
@@ -38,8 +37,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/api/user', userRouter)
-app.use('/api/posts', postsRouter)
-app.use('/api/post', postRouter)
+app.use('/api', postRouter)
 app.use('/api/stories', storiesRouter)
 app.use('/api/story', storyRouter)
 app.use('/api/likesPost', likesPostRouter)
@@ -66,10 +64,13 @@ app.use(function (error, req, res, next) {
     Object.keys(error.errors).forEach((item) => {
       errorFiled += item
     })
-
     error.message = `${errorFiled}資料欄位未填寫正確，請重新輸入！`
     error.isOperational = true
-    return resErrorProd(error, res)
+  }
+  if (error instanceof SyntaxError && error.statusCode === 400 && 'body' in error) {
+    console.error(error)
+    error.message = `請輸入 JSON 格式`
+    error.isOperational = true
   }
   resErrorProd(error, res)
 })
