@@ -13,7 +13,7 @@ router.post('/checkEmail', userControllers.checkEmail)
 router.post('/verification', userControllers.verification)
 router.patch('/resetPassword', verificationAuth, userControllers.resetPassword)
 
-router.get('/profile', isAuth, userControllers.getProfile)
+router.get('/profile/:id', isAuth, userControllers.getProfile)
 router.patch('/profile', isAuth, userControllers.updateProfile)
 router.patch('/updatePassword', isAuth, userControllers.updatePassword)
 module.exports = router

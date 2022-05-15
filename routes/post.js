@@ -21,6 +21,8 @@ const checkPostId = async (req, res, next) => {
 }
 
 router.get('/posts', isAuth, postControllers.getPosts)
+router.get('/posts/user/:userId', isAuth, postControllers.getPosts)
+
 router.get('/post/:id', isAuth, checkPostId, postControllers.getPost)
 
 router.get('/post/:id/likes', isAuth, checkPostId, postControllers.getPostLikes)

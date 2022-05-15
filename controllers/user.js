@@ -51,10 +51,10 @@ const userControllers = {
       email,
       password: bcryptPassword,
     })
-    const userId = newUser.id
-    await Profile.create({ userId })
-    await LikesPost.create({ userId })
-    await Follow.create({ userId })
+    const user = newUser.id
+    await Profile.create({ user })
+    await LikesPost.create({ user })
+    await Follow.create({ user })
     generateSendJWT(newUser, res, false)
   }),
 
@@ -154,23 +154,26 @@ const userControllers = {
   }),
 
   getProfile: handleErrorAsync(async (req, res, next) => {
-    const { _id } = req.user
-    const profile = await Profile.findOne({ userId: _id })
+    const { id } = req.params
+    const profile = await Profile.findOne({ user: id }).populate({
+      path: 'user',
+    })
     let userProfile = {}
     if (!profile) {
-      userProfile = await Profile.create({ userId: _id })
-    } else {
-      userProfile = profile
+      return next(appError(400, '查無此用戶'))
     }
     successHandle(res, profile, '取得使用者資訊')
   }),
   updateProfile: handleErrorAsync(async (req, res, next) => {
     const { _id } = req.user
-    const { coverImage, coverImageBlur, description, tags } = req.body
-    if (!coverImage && !coverImageBlur && !description && !tags) {
+    const { name, avator, coverImage, coverImageBlur, description, tags } = req.body
+    if ((!name && !avator, !coverImage && !coverImageBlur && !description && !tags)) {
       return next(appError(400, '請輸入要更新的資訊'))
     }
-    const profile = await Profile.findOneAndUpdate({ userId: _id }, { coverImage, coverImageBlur, description, tags }, { returnDocument: 'after' })
+    await User.findByIdAndUpdate(_id, { name, avator }, { returnDocument: 'after' })
+    const profile = await Profile.findOneAndUpdate({ userId: _id }, { coverImage, coverImageBlur, description, tags }, { returnDocument: 'after' }).populate({
+      path: 'user',
+    })
     successHandle(res, profile, '更新成功')
   }),
   updatePassword: handleErrorAsync(async (req, res, next) => {
@@ -193,10 +196,10 @@ const userControllers = {
     }
     const newPassword = await bcrypt.hash(password, 12)
 
-    await User.findByIdAndUpdate(req.user._id, {
+    const user = await User.findByIdAndUpdate(req.user._id, {
       password: newPassword,
     })
-    successHandle(res, [], '密碼更新成功')
+    generateSendJWT(user, res, false)
   }),
 }
 

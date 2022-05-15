@@ -8,8 +8,16 @@ const mongoose = require('mongoose')
 
 const postControllers = {
   getPosts: handleErrorAsync(async (req, res, next) => {
+    const { userId } = req.params
+
     const { sort, search } = req.query
-    const q = search !== undefined ? { content: new RegExp(search) } : {}
+    let q = {}
+    if (userId) {
+      q = { author: mongoose.Types.ObjectId(userId) }
+    }
+    if (search) {
+      q = { ...q, content: new RegExp(search) }
+    }
 
     if (sort && sort !== 'news') {
       const post = await Post.aggregate([

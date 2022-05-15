@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const profileSchema = new mongoose.Schema(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: [true, 'User ID 未填寫'],
@@ -12,6 +12,7 @@ const profileSchema = new mongoose.Schema(
     },
     coverImageBlur: {
       type: Boolean,
+      default: true,
     },
     description: {
       type: String,
