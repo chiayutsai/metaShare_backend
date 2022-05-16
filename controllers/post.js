@@ -112,6 +112,13 @@ const postControllers = {
   }),
   deletePost: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
+
+    const findPost = await Post.findById(id)
+    const postAuthorId = findPost.author.toString()
+    if (req.user.id !== postAuthorId) {
+      return next(appError(400, '此使用者沒有刪除這則貼文的權限'))
+    }
+
     const post = await Post.findByIdAndDelete(id)
     successHandle(res, post, '刪除成功')
   }),

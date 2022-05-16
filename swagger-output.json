@@ -34,7 +34,7 @@
           "200": {
             "description": "成功回應",
             "schema": {
-              "$ref":"#/definitions/postSuccessResponse"
+              "$ref":"#/definitions/isAuth"
             }
           },
           "400 (未帶 Token)": {
@@ -1043,7 +1043,7 @@
           "200": {
             "description": "成功回應",
             "schema": {
-              "$ref":"#/definitions/postSuccessResponse"
+              "$ref":"#/definitions/postsSuccessResponse"
             }
           },
           "400 (未帶 Token)": {
@@ -1080,7 +1080,7 @@
           "200": {
             "description": "成功回應",
             "schema": {
-              "$ref":"#/definitions/postSuccessResponse"
+              "$ref":"#/definitions/postsSuccessResponse"
             }
           },
           "400 (未帶 Token)": {
@@ -1211,8 +1211,8 @@
                   "example": "success"
                 },
                 "data": {
-                  "type": "array",
-                  "example": [{
+                  "type": "object",
+                  "example": {
                     "_id": "62763cb70b6e444e6fd4fbbb",
                     "author": {
                       "_id": "627100547ef69b72689e67f6",
@@ -1224,7 +1224,7 @@
                     "likes": [],
                     "createdAt": "2022-05-07T09:32:39.272Z",
                     "comments": []
-                  }]
+                  }
                 },
                 "message": {
                   "type": "string",
@@ -1308,8 +1308,8 @@
                   "example": "success"
                 },
                 "data": {
-                  "type": "array",
-                  "example": [{
+                  "type": "object",
+                  "example": {
                     "_id": "62763cb70b6e444e6fd4fbbb",
                     "author": {
                       "_id": "627100547ef69b72689e67f6",
@@ -1321,7 +1321,7 @@
                     "likes": [],
                     "createdAt": "2022-05-07T09:32:39.272Z",
                     "comments": []
-                  }]
+                  }
                 },
                 "message": {
                   "type": "string",
@@ -1490,8 +1490,8 @@
                   "example": "success"
                 },
                 "data": {
-                  "type": "array",
-                  "example": [{
+                  "type": "object",
+                  "example": {
                     "_id": "62763cb70b6e444e6fd4fbbb",
                     "author": {
                       "_id": "627100547ef69b72689e67f6",
@@ -1505,7 +1505,7 @@
                     ],
                     "createdAt": "2022-05-07T09:32:39.272Z",
                     "comments": []
-                  }]
+                  }
                 },
                 "message": {
                   "type": "string",
@@ -1665,8 +1665,8 @@
                   "example": "success"
                 },
                 "data": {
-                  "type": "array",
-                  "example": [{
+                  "type": "object",
+                  "example": {
                     "_id": "62763a35b90092b5356055ab",
                     "author": "627100547ef69b72689e67f6",
                     "content": "更新內容2",
@@ -1683,7 +1683,7 @@
                             "_id": "6277901ac3db681a968b7c65"
                         }
                     ]
-                }]
+                  }
                 },
                 "message": {
                   "type": "string",
@@ -1784,8 +1784,8 @@
                   "example": "success"
                 },
                 "data": {
-                  "type": "array",
-                  "example": [{
+                  "type": "object",
+                  "example": {
                     "_id": "62763cb70b6e444e6fd4fbbb",
                     "author": {
                       "_id": "627100547ef69b72689e67f6",
@@ -1797,7 +1797,7 @@
                     "likes": [],
                     "createdAt": "2022-05-07T09:32:39.272Z",
                     "comments": []
-                  }]
+                  }
                 },
                 "message": {
                   "type": "string",
@@ -2035,20 +2035,20 @@
           "example": "success"
         },
         "data": {
-          "type": "array",
-          "example": [{
-            "_id": "62763cb70b6e444e6fd4fbbb",
+          "type": "object",
+          "example": {
+            "id": "62763cb70b6e444e6fd4fbbb",
             "name": "Chia Yu",
             "avator": "https://imgur.com/LwPqBcI.png",
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NjUxOSwiZXhwIjoxNjUzMjkxMzE5fQ.9Z9HZoI90XfFJ9j9G620Q9WETqDFksDWCNyt_lDT3t1"
-          }]
+          }
         }
       },
       "xml": {
         "name": "main"
       }
     },
-    "postSuccessResponse":{
+    "postsSuccessResponse":{
       "type": "object",
       "properties": {
         "status": {
@@ -2070,6 +2070,35 @@
             "createdAt": "2022-05-07T09:32:39.272Z",
             "comments": []
           }]
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
+    "postSuccessResponse":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "example": {
+            "_id": "62763cb70b6e444e6fd4fbbb",
+            "author": {
+              "_id": "627100547ef69b72689e67f6",
+              "name": "Chia Yu",
+              "avator": "https://imgur.com/LwPqBcI.png"
+            },
+            "content": "123",
+            "imageUrls": [],
+            "likes": [],
+            "createdAt": "2022-05-07T09:32:39.272Z",
+            "comments": []
+          }
         }
       
       },
