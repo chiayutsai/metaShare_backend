@@ -8,12 +8,11 @@ const mongoose = require('mongoose')
 
 const postControllers = {
   getPosts: handleErrorAsync(async (req, res, next) => {
-    const { userId } = req.params
-
+    const { id } = req.params
     const { sort, search } = req.query
     let q = {}
-    if (userId) {
-      q = { author: mongoose.Types.ObjectId(userId) }
+    if (id) {
+      q = { author: mongoose.Types.ObjectId(id) }
     }
     if (search) {
       q = { ...q, content: new RegExp(search) }
