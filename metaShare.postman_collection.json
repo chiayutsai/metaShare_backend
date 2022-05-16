@@ -6,91 +6,695 @@
 	},
 	"item": [
 		{
-			"name": "取得所有貼文",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://mata-share-backend.herokuapp.com/api/posts",
-					"protocol": "https",
-					"host": [
-						"mata-share-backend",
-						"herokuapp",
-						"com"
-					],
-					"path": [
-						"api",
-						"posts"
+			"name": "使用者相關",
+			"item": [
+				{
+					"name": "註冊登入",
+					"item": [
+						{
+							"name": "檢查使用者是否登入",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/user/check",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"user",
+										"check"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "註冊",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"chia Yu\",\r\n    \"email\": \"test123@gmail.com\",\r\n    \"password\": \"a1234567\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/user/register",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"user",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "登入",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"123@gmail.com\",\r\n    \"password\": \"a11111111\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/user/login",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "忘記密碼",
+					"item": [
+						{
+							"name": "取得驗證碼",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"123@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/user/checkEmail",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"user",
+										"checkEmail"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "驗證驗證碼",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"123@gmail.com\",\r\n    \"verification\": \"4251\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/user/verification",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"user",
+										"verification"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "重設密碼",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyODIwNDVjZDQwOGZkMmM1ZmZiZDg3MSIsImlzUmVzZXRQYXNzd29yZCI6dHJ1ZSwiaWF0IjoxNjUyNjkzOTIzLCJleHAiOjE2NTMyOTg3MjN9.XhXEfRzsOgjDmysa_7uv6r3cX4v783ywbPCDcBMt59o",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"a11111111\",\r\n  \"confirmPassword\": \"a11111111\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/user/resetPassword",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"user",
+										"resetPassword"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "使用者資訊",
+					"item": [
+						{
+							"name": "取得使用者資訊",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/user/profile/627100547ef69b72689e67f6",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"user",
+										"profile",
+										"627100547ef69b72689e67f6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "更新使用者資訊",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"description\": \"貓貓好可愛\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/user/profile",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"user",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "更新密碼",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"aaaa1111\",\r\n  \"confirmPassword\": \"aaaa1111\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/user/updatePassword",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"user",
+										"updatePassword"
+									]
+								}
+							},
+							"response": []
+						}
 					]
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "新增一筆貼文",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"author\":\"627100547ef69b72689e67f6\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "貼文相關",
+			"item": [
+				{
+					"name": "按喜歡功能",
+					"item": [
+						{
+							"name": "取得單則貼文喜歡的人",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/post/6282524667833064bd89c5aa/likes",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"post",
+										"6282524667833064bd89c5aa",
+										"likes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "喜歡/收回喜歡",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/post/6282524667833064bd89c5aa/likes",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"post",
+										"6282524667833064bd89c5aa",
+										"likes"
+									]
+								}
+							},
+							"response": []
 						}
-					}
-				},
-				"url": {
-					"raw": "https://mata-share-backend.herokuapp.com/api/post",
-					"protocol": "https",
-					"host": [
-						"mata-share-backend",
-						"herokuapp",
-						"com"
-					],
-					"path": [
-						"api",
-						"post"
 					]
+				},
+				{
+					"name": "留言功能",
+					"item": [
+						{
+							"name": "取得單則貼文的留言",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/post/6282524667833064bd89c5aa/comments",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"post",
+										"6282524667833064bd89c5aa",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "新增留言",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\":\"留言內容\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://mata-share-backend.herokuapp.com/api/post/6282524667833064bd89c5aa/comments",
+									"protocol": "https",
+									"host": [
+										"mata-share-backend",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"api",
+										"post",
+										"6282524667833064bd89c5aa",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "取得全部貼文",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://mata-share-backend.herokuapp.com/api/posts",
+							"protocol": "https",
+							"host": [
+								"mata-share-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得特定用戶貼文",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://mata-share-backend.herokuapp.com/api/posts/user/627100547ef69b72689e67f6",
+							"protocol": "https",
+							"host": [
+								"mata-share-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"posts",
+								"user",
+								"627100547ef69b72689e67f6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得單筆貼文",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://mata-share-backend.herokuapp.com/api/post/627fd79b896f7a8df64f81a9",
+							"protocol": "https",
+							"host": [
+								"mata-share-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"post",
+								"627fd79b896f7a8df64f81a9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刪除單筆貼文",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://mata-share-backend.herokuapp.com/api/post/627fd6ec896f7a8df64f8178",
+							"protocol": "https",
+							"host": [
+								"mata-share-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"post",
+								"627fd6ec896f7a8df64f8178"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新單筆貼文",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\":\"更新\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://mata-share-backend.herokuapp.com/api/post/627fd6dd896f7a8df64f8172",
+							"protocol": "https",
+							"host": [
+								"mata-share-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"post",
+								"627fd6dd896f7a8df64f8172"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增貼文",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\":\"測試貼文\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://mata-share-backend.herokuapp.com/api/post",
+							"protocol": "https",
+							"host": [
+								"mata-share-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"post"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "上傳圖片",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "image",
-							"type": "file",
-							"src": []
+			"item": [
+				{
+					"name": "上傳圖片",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NDM0NiwiZXhwIjoxNjUzMjg5MTQ2fQ.xy0Sx_fAXTLiyT8p4UpQdKZeDBKXQAGSNgVUfHdgdD1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "type",
+									"value": "file",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "type",
-							"value": "file",
-							"type": "text"
+						"url": {
+							"raw": "https://mata-share-backend.herokuapp.com/api/uploadImage",
+							"protocol": "https",
+							"host": [
+								"mata-share-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"uploadImage"
+							]
 						}
-					]
-				},
-				"url": {
-					"raw": "https://mata-share-backend.herokuapp.com/api/uploadImage",
-					"protocol": "https",
-					"host": [
-						"mata-share-backend",
-						"herokuapp",
-						"com"
-					],
-					"path": [
-						"api",
-						"uploadImage"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
