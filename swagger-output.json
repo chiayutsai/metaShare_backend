@@ -4,7 +4,7 @@
     "title": "MetaShare Api",
     "description": "MetaShare 相關 Api"
   },
-  "host": "127.0.0.1:3000",
+  "host": "mata-share-backend.herokuapp.com",
   "basePath": "/",
   "tags": [],
   "schemes": [
@@ -22,30 +22,6 @@
   "consumes": [],
   "produces": [],
   "paths": {
-    "/api/user/": {
-      "get": {
-        "tags": ["User"],
-        "description": "取得全部使用者",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/user/login": {
-      "post": {
-        "tags": ["User"],
-        "description": "登入",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/user/register": {
-      "post": {
-        "tags": ["User"],
-        "description": "註冊",
-        "parameters": [],
-        "responses": {}
-      }
-    },
     "/api/user/check": {
       "get": {
         "tags": ["User"],
@@ -54,58 +30,1009 @@
           "Bearer":[]
         }],
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/postSuccessResponse"
+            }
+          },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          }
+        }
+      }
+    },
+    "/api/user/register": {
+      "post": {
+        "tags": ["User"],
+        "description": "註冊",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Chia Yu"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "test@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "a1234567"
+                }
+              },"required": [
+                "name",
+                "email",
+                "password"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/isAuth"
+            }
+          },
+          "400 (欄位為空)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位未正確填寫！"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (密碼小於8碼)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "密碼字數低於 8 碼"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (密碼複雜度低)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "密碼需英數混合"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (Email 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email 格式不正確"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (重複註冊)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "此 E-mail 已被註冊"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "tags": ["User"],
+        "description": "登入",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "test@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "a1234567"
+                }
+              },"required": [
+                "email",
+                "password"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/isAuth"
+            }
+          },
+          "400 (欄位為空)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位未正確填寫！"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (Email 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email 格式不正確"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (帳號密碼錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "輸入的帳號或密碼不正確"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/api/user/checkEmail": {
       "post": {
-        "tags": ["User"],
+        "tags": ["Forget Password"],
         "description": "取得驗證碼",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "test@gmail.com"
+                }
+              },"required": [
+                "email"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "寄送驗證碼至Email"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (欄位為空)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "欄位未正確填寫！"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (Email 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email 格式不正確"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (Email 尚未註冊)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'此 E-mail 尚未註冊"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/api/user/verification": {
       "post": {
-        "tags": ["User"],
+        "tags": ["Forget Password"],
         "description": "驗證驗證碼",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "test@gmail.com"
+                },
+                "verification": {
+                  "type": "string",
+                  "example": "1234"
+                }
+              },"required": [
+                "email",
+                "verification"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "example": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NjUxOSwiZXhwIjoxNjUzMjkxMzE5fQ.9Z9HZoI90XfFJ9j9G620Q9WETqDFksDWCNyt_lDT3t1"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (Email欄位為空)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email 欄位未正確填寫！"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (Email 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email 格式不正確"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (Email 尚未註冊)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'此 E-mail 尚未註冊"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (驗證碼欄位為空)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'請輸入收到的驗證碼！"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (驗證碼錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'驗證碼輸入錯誤，請重新輸入"
+                }  
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/api/user/resetPassword": {
       "patch": {
-        "tags": ["User"],
+        "tags": ["Forget Password"],
         "description": "重設密碼",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Token (重設密碼用 Token)",
+            "required":true,
+            "type": "string"
+            },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "a1234567"
+                },
+                "confirmPassword": {
+                  "type": "string",
+                  "example": "a1234567"
+                }
+              },"required": [
+                "password",
+                "confirmPassword"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "密碼更新成功"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (未帶重設密碼的 token)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "請輸入E-mail 取得驗證碼"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (重設密碼的 token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "認證失敗，請重新輸入E-mail 取得驗證碼"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (欄位為空)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'欄位未正確填寫！"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (密碼低於八碼)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'密碼字數低於 8 碼"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (密碼複雜度低)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'密碼需英數混合"
+                }  
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (密碼輸入不一致)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'密碼輸入不一致！"
+                }  
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/profile/{id}": {
+      "get": {
+        "tags": ["Profile"],
+        "security":[{
+          "Bearer":[]
+        }],
+        "description": "取得使用者資訊",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/profileSuccessResponse"
+            }
+          },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "使用者 ID 格式錯誤，請重新確認"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (無此使用者)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查無此用戶"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/api/user/profile": {
-      "get": {
-        "tags": ["User"],
-        "description": "取得使用者資訊",
-        "parameters": [],
-        "responses": {}
-      },
       "patch": {
-        "tags": ["User"],
+        "tags": ["Profile"],
+        "security":[{
+          "Bearer":[]
+        }],
         "description": "修改使用者資訊",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Chia Yu"
+                },
+                "avator": {
+                  "type": "string",
+                  "example": "https://imgur.com/LwPqBcI.png"
+                },
+                "coverImage": {
+                  "type": "string",
+                  "example": "https://imgur.com/h1ZySXl.png"
+                },
+                "coverImageBlur": {
+                  "type": "boolean",
+                  "example":true
+                },
+                "description": {
+                  "type": "string",
+                  "example":"貓貓好可愛喔"
+                },
+                "tags": {
+                  "type": "array",
+                  "example":["旅遊"]
+                }
+              }
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/profileSuccessResponse"
+            }
+          },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
+          "400 (body 為空)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "請輸入要更新的資訊"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/api/user/updatePassword": {
       "patch": {
-        "tags": ["User"],
+        "tags": ["Profile"],
         "description": "更新密碼",
-        "parameters": [],
-        "responses": {}
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "資料格式",
+            "required":true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "a1234567"
+                },
+                "confirmPassword": {
+                  "type": "string",
+                  "example": "a1234567"
+                }
+              },"required": [
+                "password",
+                "confirmPassword"
+              ]
+            },
+            "type": "string"
+            }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/isAuth"
+            }
+          },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
+          "400 (欄位為空)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'欄位未正確填寫！"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (密碼低於八碼)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'密碼字數低於 8 碼"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (密碼複雜度低)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'密碼需英數混合"
+                }  
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (密碼輸入不一致)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "'密碼輸入不一致！"
+                }  
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/api/posts/": {
       "get": {
-        "tags": ["Posts"],
+        "tags": ["Post"],
         "description": "取得全部貼文",
         "security":[{
           "Bearer":[]
@@ -119,10 +1046,93 @@
               "$ref":"#/definitions/postSuccessResponse"
             }
           },
-          "400": {
+          "400 (未帶 Token)": {
             "description": "失敗回應",
             "schema": {
-              "$ref":"#/definitions/errorResponse"
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          }
+        }
+      }
+    },
+    "/api/posts/user/{id}": {
+      "get": {
+        "tags": ["Post"],
+        "description": "取得該使用者貼文",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/postSuccessResponse"
+            }
+          },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "使用者 ID 格式錯誤，請重新確認"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (無此使用者)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查無此用戶"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           }
         }
@@ -150,6 +1160,18 @@
               "$ref":"#/definitions/postSuccessResponse"
             }
           },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
           "400 (ID 格式錯誤)": {
             "description": "失敗回應",
             "schema": {
@@ -160,12 +1182,6 @@
             "description": "失敗回應",
             "schema": {
               "$ref":"#/definitions/notFoundIdErrorResponse"
-            }
-          },
-          "400": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/errorResponse"
             }
           }
         }
@@ -220,6 +1236,18 @@
               }
             }
           },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
           "400 (ID 格式錯誤)": {
             "description": "失敗回應",
             "schema": {
@@ -230,12 +1258,6 @@
             "description": "失敗回應",
             "schema": {
               "$ref":"#/definitions/notFoundIdErrorResponse"
-            }
-          },
-          "400": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/errorResponse"
             }
           }
         }
@@ -331,6 +1353,18 @@
               }
             }
           },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
           "400 (ID 格式錯誤)": {
             "description": "失敗回應",
             "schema": {
@@ -341,12 +1375,6 @@
             "description": "失敗回應",
             "schema": {
               "$ref":"#/definitions/notFoundIdErrorResponse"
-            }
-          },
-          "400 (尚未登入)": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/userIdErrorResponse"
             }
           },
           "400 (使用者無權限)": {
@@ -367,12 +1395,6 @@
               "xml": {
                 "name": "main"
               }
-            }
-          },
-          "400": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/errorResponse"
             }
           }
         }
@@ -775,6 +1797,18 @@
               }
             }
           },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
           "400 (沒有貼文內容)": {
             "description": "失敗回應",
             "schema": {
@@ -794,75 +1828,14 @@
                 "name": "main"
               }
             }
-          },
-          "400 (尚未登入)": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/userIdErrorResponse"
-            }
-          },
-          "400": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/errorResponse"
-            }
           }
         }
-      }
-    },
-    "/api/stories/": {
-      "get": {
-        "tags": ["stories"],
-        "description": "取得全部限時動態",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/story/": {
-      "post": {
-        "tags": ["story"],
-        "description": "新增單筆限時動態",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/story/{id}": {
-      "delete": {
-        "tags": ["story"],
-        "description": "刪除單筆限時動態",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/likesPost/{id}": {
-      "get": {
-        "tags": ["likesPost"],
-        "description": "取得使用者喜歡的貼文列表",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/follow/{id}": {
-      "get": {
-        "tags": ["follow"],
-        "description": "取得追蹤名單/被誰追蹤",
-        "parameters": [],
-        "responses": {}
-      },
-      "patch": {
-        "tags": ["follow"],
-        "description": "更新追蹤名單/被誰追蹤",
-        "parameters": [],
-        "responses": {}
       }
     },
     "/api/uploadImage/": {
       "post": {
         "tags": ["uploadImage"],
         "description": "上傳圖片",
-        "security":[{
-          "Bearer":[]
-        }],
         "consumes":["multipart/form-data"],
         "parameters": [
           {
@@ -979,7 +1952,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "傳失敗，請重新上傳"
+                  "example": "上傳失敗，請重新上傳"
                 }
               
               },
@@ -999,6 +1972,61 @@
     }
   },
   "definitions": {
+    "notFoundToken":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "尚未登入！"
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
+    "invalidToken":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "認證失敗，請重新登入"
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
+    "isAuth":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "array",
+          "example": [{
+            "_id": "62763cb70b6e444e6fd4fbbb",
+            "name": "Chia Yu",
+            "avator": "https://imgur.com/LwPqBcI.png",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzEwMDU0N2VmNjliNzI2ODllNjdmNiIsImlzUmVzZXRQYXNzd29yZCI6ZmFsc2UsImlhdCI6MTY1MjY4NjUxOSwiZXhwIjoxNjUzMjkxMzE5fQ.9Z9HZoI90XfFJ9j9G620Q9WETqDFksDWCNyt_lDT3t1"
+          }]
+        }
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
     "postSuccessResponse":{
       "type": "object",
       "properties": {
@@ -1021,6 +2049,38 @@
             "createdAt": "2022-05-07T09:32:39.272Z",
             "comments": []
           }]
+        }
+      
+      },
+      "xml": {
+        "name": "main"
+      }
+    },
+    "profileSuccessResponse":{
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "example": {
+            "_id": "62763cb70b6e444e6fd4fbbb",
+            "tags": [
+              "貓派",
+              "傳說對決",
+              "旅遊"
+          ],
+          "description": "貓貓好可愛\n",
+          "user": {
+              "_id": "627100547ef69b72689e67f6",
+              "name": "Chia Yu",
+              "avator": "https://imgur.com/LwPqBcI.png"
+          },
+          "coverImage": "https://imgur.com/h1ZySXl.png",
+          "coverImageBlur": true
+          }
         }
       
       },
