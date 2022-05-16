@@ -13,9 +13,7 @@ const { generateSendJWT } = require('../service/auth')
 const sendEmail = require('../service/email')
 
 const userControllers = {
-  getAllUsers: handleErrorAsync(async (req, res, next) => {
-    successHandle(res, '取得全部使用者')
-  }),
+
   register: handleErrorAsync(async (req, res, next) => {
     let { name, email, password } = req.body
 
@@ -53,8 +51,8 @@ const userControllers = {
     })
     const user = newUser.id
     await Profile.create({ user })
-    await LikesPost.create({ user })
-    await Follow.create({ user })
+    await LikesPost.create({ userId:user })
+    await Follow.create({ userId:user })
     generateSendJWT(newUser, res, false)
   }),
 
@@ -113,11 +111,26 @@ const userControllers = {
 
   verification: handleErrorAsync(async (req, res, next) => {
     const inputEmail = req.body.email
+
+    // 內容不可為空
+    if (!inputEmail) {
+      return next(appError(400, 'Email 欄位未正確填寫！'))
+    }
+
+    // 是否為 Email
+    if (!validator.isEmail(inputEmail)) {
+      return next(appError(400, 'Email 格式不正確'))
+    }
+    const user = await User.findOne({ email: inputEmail }).select('+email')
+    if (!user) {
+      return next(appError(400, '此 E-mail 尚未註冊'))
+    }
+    
     const inputVerification = req.body.verification
     if (!inputVerification) {
       return next(appError(400, '請輸入收到的驗證碼！'))
     }
-    const user = await User.findOne({ email: inputEmail })
+   
     const { verification } = await Verification.findOne({ userId: user._id })
 
     if (inputVerification !== verification) {

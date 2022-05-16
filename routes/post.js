@@ -6,19 +6,7 @@ const Post = require('../models/PostsModel')
 const User = require('../models/UsersModel')
 const appError = require('../service/appError')
 const { isAuth } = require('../service/auth')
-
-const checkPostId = async (req, res, next) => {
-  const { id } = req.params
-  const isValidId = mongoose.Types.ObjectId.isValid(id)
-  if (!isValidId) {
-    return next(appError(400, '貼文 ID 格式錯誤，請重新確認'))
-  }
-  const post = await Post.findById(id)
-  if (!post) {
-    return next(appError(400, '查無此篇貼文，貼文已不存在'))
-  }
-  next()
-}
+const {checkPostId} = require('../service/checkId')
 
 router.get('/posts', isAuth, postControllers.getPosts)
 router.get('/posts/user/:userId', isAuth, postControllers.getPosts)

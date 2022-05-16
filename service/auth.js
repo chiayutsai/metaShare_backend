@@ -6,9 +6,10 @@ const appError = require('../service/appError')
 const User = require('../models/UsersModel')
 
 const generateSendJWT = (user, res, isResetPassword) => {
+  const erpire = isResetPassword?process.env.JWT_EXPIRES_RESET_PASSWORD_DAY:process.env.JWT_EXPIRES_DAY
   // 產生 JWT token
   const token = jwt.sign({ id: user._id, isResetPassword }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_DAY,
+    expiresIn: erpire,
   })
 
   let newUser = {
