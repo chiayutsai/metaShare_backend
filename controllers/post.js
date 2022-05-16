@@ -152,7 +152,7 @@ const postControllers = {
 
   updatePostComments: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
-    const userId = req.body.author
+    const userId = req.user._id
     const { content } = req.body
     if (!content) {
       return next(appError(400, '請輸入留言內容'))
