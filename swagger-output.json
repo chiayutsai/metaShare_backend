@@ -1439,6 +1439,18 @@
               }
             }
           },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
           "400 (ID 格式錯誤)": {
             "description": "失敗回應",
             "schema": {
@@ -1449,12 +1461,6 @@
             "description": "失敗回應",
             "schema": {
               "$ref":"#/definitions/notFoundIdErrorResponse"
-            }
-          },
-          "400": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/errorResponse"
             }
           }
         }
@@ -1511,6 +1517,18 @@
               }
             }
           },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
           "400 (ID 格式錯誤)": {
             "description": "失敗回應",
             "schema": {
@@ -1521,18 +1539,6 @@
             "description": "失敗回應",
             "schema": {
               "$ref":"#/definitions/notFoundIdErrorResponse"
-            }
-          },
-          "400 (尚未登入)": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/userIdErrorResponse"
-            }
-          },
-          "400": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/errorResponse"
             }
           }
         }
@@ -1590,6 +1596,18 @@
               }
             }
           },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
           "400 (ID 格式錯誤)": {
             "description": "失敗回應",
             "schema": {
@@ -1600,12 +1618,6 @@
             "description": "失敗回應",
             "schema": {
               "$ref":"#/definitions/notFoundIdErrorResponse"
-            }
-          },
-          "400": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/errorResponse"
             }
           }
         }
@@ -1703,6 +1715,18 @@
               }
             }
           },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
           "400 (ID 格式錯誤)": {
             "description": "失敗回應",
             "schema": {
@@ -1713,18 +1737,6 @@
             "description": "失敗回應",
             "schema": {
               "$ref":"#/definitions/notFoundIdErrorResponse"
-            }
-          },
-          "400 (尚未登入)": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/userIdErrorResponse"
-            }
-          },
-          "400": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/errorResponse"
             }
           }
         }
@@ -1836,6 +1848,9 @@
       "post": {
         "tags": ["uploadImage"],
         "description": "上傳圖片",
+        "security":[{
+          "Bearer":[]
+        }],
         "consumes":["multipart/form-data"],
         "parameters": [
           {
@@ -1879,6 +1894,18 @@
               "xml": {
                 "name": "main"
               }
+            }
+          },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
             }
           },
           "400 (檔案類型錯誤)": {
@@ -1959,12 +1986,6 @@
               "xml": {
                 "name": "main"
               }
-            }
-          },
-          "400": {
-            "description": "失敗回應",
-            "schema": {
-              "$ref":"#/definitions/errorResponse"
             }
           }
         }
