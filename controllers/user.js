@@ -13,7 +13,6 @@ const { generateSendJWT } = require('../service/auth')
 const sendEmail = require('../service/email')
 
 const userControllers = {
-
   register: handleErrorAsync(async (req, res, next) => {
     let { name, email, password } = req.body
 
@@ -49,10 +48,10 @@ const userControllers = {
       email,
       password: bcryptPassword,
     })
-    const user = newUser.id
+    const user = newUser._id
     await Profile.create({ user })
-    await LikesPost.create({ userId:user })
-    await Follow.create({ userId:user })
+    await LikesPost.create({ userId: user })
+    await Follow.create({ userId: user })
     generateSendJWT(newUser, res, false)
   }),
 
@@ -125,12 +124,12 @@ const userControllers = {
     if (!user) {
       return next(appError(400, '此 E-mail 尚未註冊'))
     }
-    
+
     const inputVerification = req.body.verification
     if (!inputVerification) {
       return next(appError(400, '請輸入收到的驗證碼！'))
     }
-   
+
     const { verification } = await Verification.findOne({ userId: user._id })
 
     if (inputVerification !== verification) {
@@ -180,11 +179,11 @@ const userControllers = {
   updateProfile: handleErrorAsync(async (req, res, next) => {
     const { _id } = req.user
     const { name, avator, coverImage, coverImageBlur, description, tags } = req.body
-    if ((!name && !avator, !coverImage && !coverImageBlur && !description && !tags)) {
+    if (!name && !avator && !coverImage && !coverImageBlur && !description && !tags) {
       return next(appError(400, '請輸入要更新的資訊'))
     }
     await User.findByIdAndUpdate(_id, { name, avator }, { returnDocument: 'after' })
-    const profile = await Profile.findOneAndUpdate({ userId: _id }, { coverImage, coverImageBlur, description, tags }, { returnDocument: 'after' }).populate({
+    const profile = await Profile.findOneAndUpdate({ user: _id }, { coverImage, coverImageBlur, description, tags }, { returnDocument: 'after' }).populate({
       path: 'user',
     })
     successHandle(res, profile, '更新成功')
