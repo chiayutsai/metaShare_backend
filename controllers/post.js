@@ -169,7 +169,10 @@ const postControllers = {
       content,
       createdAt: Date.now(),
     }
-    const post = await Post.findByIdAndUpdate(id, { $push: { comments: data } }, { returnDocument: 'after' })
+    const post = await Post.findByIdAndUpdate(id, { $push: { comments: data } }, { returnDocument: 'after' }).populate({
+      path: 'comments',
+      populate: { path: 'commenter' },
+    })
 
     successHandle(res, post, '留言成功')
   }),
