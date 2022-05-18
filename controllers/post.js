@@ -70,6 +70,14 @@ const postControllers = {
   getPost: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
     const post = await Post.findById(id)
+      .populate({
+        path: 'author',
+        select: 'name avator',
+      })
+      .populate({
+        path: 'comments',
+        populate: { path: 'commenter' },
+      })
     successHandle(res, post)
   }),
 
