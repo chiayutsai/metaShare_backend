@@ -120,6 +120,13 @@ const postControllers = {
     }
 
     const post = await Post.findByIdAndDelete(id)
+    await LikesPost.updateMany(
+      {
+        posts: { $in: [id] },
+      },
+      { $pull: { posts: id } }
+    )
+
     successHandle(res, post, '刪除成功')
   }),
 
