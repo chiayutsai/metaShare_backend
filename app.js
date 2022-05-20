@@ -4,6 +4,9 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const cors = require('cors')
 const swaggerUI = require('swagger-ui-express')
+
+require('./connections')
+
 const swaggerFile = require('./swagger-output.json')
 const userRouter = require('./routes/user')
 const postRouter = require('./routes/post')
@@ -14,7 +17,6 @@ const followRouter = require('./routes/follow')
 const uploadImageRouter = require('./routes/uploadImage')
 const { resErrorProd, resErrorDev } = require('./service/resError')
 
-require('./connections')
 process.on('uncaughtException', (err) => {
   // 記錄錯誤下來，等到服務都處理完後，停掉該 process
   console.error('Uncaughted Exception！')
