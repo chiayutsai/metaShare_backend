@@ -26,6 +26,9 @@ const postSchema = new mongoose.Schema(
       type: [{ commenter: { type: mongoose.Schema.ObjectId, ref: 'User' }, content: String, createdAt: Date }],
       default: [],
     },
+    // commentsCount: {
+    //   type:
+    // }
   },
   { versionKey: false }
 )
