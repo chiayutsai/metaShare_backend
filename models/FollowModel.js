@@ -8,11 +8,11 @@ const followSchema = new mongoose.Schema(
       required: [true, 'User ID 未填寫'],
     },
     following: {
-      type: [{ userId: { type: mongoose.Schema.ObjectId, ref: 'User' }, followAt: { type: Date, default: Date.now } }],
+      type: [{ user: { type: mongoose.Schema.ObjectId, ref: 'User' }, followAt: { type: Date, default: Date.now } }],
       default: [],
     },
     follower: {
-      type: [{ userId: { type: mongoose.Schema.ObjectId, ref: 'User' }, followAt: { type: Date, default: Date.now } }],
+      type: [{ user: { type: mongoose.Schema.ObjectId, ref: 'User' }, followAt: { type: Date, default: Date.now } }],
       default: [],
     },
   },
