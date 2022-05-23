@@ -13,6 +13,10 @@ const { generateSendJWT } = require('../service/auth')
 const sendEmail = require('../service/email')
 
 const userControllers = {
+  getUsers: handleErrorAsync(async (req, res, next) => {
+    const Users = await User.find({}).sort({ name: 1 })
+    successHandle(res, Users)
+  }),
   register: handleErrorAsync(async (req, res, next) => {
     let { name, email, password } = req.body
 
