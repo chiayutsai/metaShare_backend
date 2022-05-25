@@ -26,6 +26,7 @@
     "swagger-autogen": "^2.5.10",
     "swagger-ui-express": "^4.3.0",
     "tslib": "^2.4.0",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "ws": "^8.6.0"
   }
 }
