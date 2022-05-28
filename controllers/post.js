@@ -12,6 +12,9 @@ const postControllers = {
   getPosts: handleErrorAsync(async (req, res, next) => {
     const { id } = req.params
     const { sort, search } = req.query
+    const skip = Number(req.query.skip || 0)
+    const limit = Number(req.query.limit || 0)
+      
     let q = {}
     if (id) {
       q = { author: mongoose.Types.ObjectId(id) }
@@ -21,7 +24,7 @@ const postControllers = {
     }
 
     if (sort && sort !== 'news') {
-      const post = await Post.aggregate([
+      let postPromise = Post.aggregate([
         {
           $match: q,
         },
@@ -49,9 +52,21 @@ const postControllers = {
         {
           $sort: {
             length: -1,
+            createdAt: -1, // 相同讚數或留言數用創立時間排序
           },
         },
       ])
+
+      if (limit) {
+        postPromise.limit(skip + limit)
+      }
+
+      if (skip) {
+        postPromise.skip(skip)
+      }
+  
+      const post = await postPromise
+      
       await Post.populate(post, {
         path: 'author',
         select: 'name avator',
@@ -71,6 +86,9 @@ const postControllers = {
           path: 'comments',
         })
         .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+
       successHandle(res, post)
     }
   }),
