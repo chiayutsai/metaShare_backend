@@ -25,6 +25,14 @@ const postControllers = {
           $match: q,
         },
         {
+          $lookup: {
+            from: 'comments',
+            localField: '_id',
+            foreignField: 'post',
+            as: 'comments',
+          },
+        },
+        {
           $project: {
             author: 1,
             content: 1,
