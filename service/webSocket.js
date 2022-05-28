@@ -1,5 +1,6 @@
 const SocketServer = require('ws').Server
 const jwt = require('jsonwebtoken')
+const Channel = require('../models/ChannelModel')
 
 const createWebsocket = (server) => {
   const wss = new SocketServer({ server })
@@ -50,6 +51,11 @@ const createWebsocket = (server) => {
       }
       if (commandCode == '10') {
         const { from, to, message } = JSON.parse(data)
+        await Channel.findOneAndUpdate(
+          { $and: [{ user: { $in: to } }, { user: { $in: from } }] },
+          { $push: { messages: { from, message } } },
+          { returnDocument: 'after' }
+        )
         ws.send(
           JSON.stringify({
             commandCode: '11',
@@ -66,6 +72,21 @@ const createWebsocket = (server) => {
             to,
             message,
             createAt: Date.now(),
+          })
+        )
+      }
+      if (commandCode == '40') {
+        const { to, userId } = JSON.parse(data)
+        let channel = await Channel.findOne({ $and: [{ user: { $in: to } }, { user: { $in: userId } }] })
+
+        if (!channel) {
+          channel = await Channel.create({ user: [to, userId] })
+        }
+        ws.send(
+          JSON.stringify({
+            commandCode: '41',
+            channel,
+            channelId: to,
           })
         )
       }

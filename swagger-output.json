@@ -1622,7 +1622,7 @@
           }
         }
       },
-      "patch": {
+      "post": {
         "tags": ["Post"],
         "description": "新增留言",
         "security":[{
@@ -1667,22 +1667,15 @@
                 "data": {
                   "type": "object",
                   "example": {
-                    "_id": "62763a35b90092b5356055ab",
-                    "author": "627100547ef69b72689e67f6",
-                    "content": "更新內容2",
-                    "imageUrls": [
-                        "https://i.imgur.com/L7EzN1j.png"
-                    ],
-                    "likes": [],
-                    "createdAt": "2022-05-07T09:21:57.477Z",
-                    "comments": [
-                        {
-                            "commenter": "627100547ef69b72689e67f6",
-                            "content": "留言",
-                            "createdAt": "2022-05-08T09:40:42.081Z",
-                            "_id": "6277901ac3db681a968b7c65"
-                        }
-                    ]
+                    "content": "留言內容",
+                    "commenter": {
+                        "_id": "627100547ef69b72689e67f6",
+                        "name": "Chia Yu",
+                        "avator": "https://imgur.com/LwPqBcI.png"
+                    },
+                    "post": "628a47063fb8e0408d963278",
+                    "_id": "62920e0806da30b9b1d0b1b1",
+                    "createdAt": "2022-05-28T11:56:56.354Z"
                   }
                 },
                 "message": {
@@ -1839,6 +1832,36 @@
               "xml": {
                 "name": "main"
               }
+            }
+          }
+        }
+      }
+    },
+    "/api/likesPost/": {
+      "get": {
+        "tags": ["likesPost"],
+        "description": "取得使用者喜歡的貼文列表",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "$ref":"#/definitions/postsSuccessResponse"
+            }
+          },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
             }
           }
         }

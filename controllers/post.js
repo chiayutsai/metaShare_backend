@@ -2,6 +2,7 @@ const successHandle = require('../server/handle')
 const Post = require('../models/PostsModel')
 const User = require('../models/UsersModel')
 const LikesPost = require('../models/LikesPostModel')
+const Comment = require('../models/CommentModel')
 const appError = require('../service/appError')
 const handleErrorAsync = require('../service/handleErrorAsync')
 const mongoose = require('mongoose')
@@ -48,7 +49,6 @@ const postControllers = {
       })
       await Post.populate(post, {
         path: 'comments',
-        populate: { path: 'commenter' },
       })
 
       successHandle(res, post)
@@ -60,7 +60,6 @@ const postControllers = {
         })
         .populate({
           path: 'comments',
-          populate: { path: 'commenter' },
         })
         .sort({ createdAt: -1 })
       successHandle(res, post)
@@ -76,7 +75,6 @@ const postControllers = {
       })
       .populate({
         path: 'comments',
-        populate: { path: 'commenter' },
       })
     successHandle(res, post)
   }),
@@ -94,7 +92,6 @@ const postControllers = {
     const { id } = req.params
     const post = await Post.findById(id).populate({
       path: 'comments',
-      populate: { path: 'commenter' },
     })
 
     const postComments = post.comments
@@ -179,17 +176,14 @@ const postControllers = {
     if (!content) {
       return next(appError(400, '請輸入留言內容'))
     }
-    const data = {
+
+    const comment = await Comment.create({
       commenter: userId,
       content,
-      createdAt: Date.now(),
-    }
-    const post = await Post.findByIdAndUpdate(id, { $push: { comments: data } }, { returnDocument: 'after' }).populate({
-      path: 'comments',
-      populate: { path: 'commenter' },
+      post: id,
     })
 
-    successHandle(res, post, '留言成功')
+    successHandle(res, comment, '留言成功')
   }),
 }
 

@@ -22,17 +22,14 @@ const postSchema = new mongoose.Schema(
       type: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
       default: [],
     },
-    comments: {
-      type: [{ commenter: { type: mongoose.Schema.ObjectId, ref: 'User' }, content: String, createdAt: Date }],
-      default: [],
-    },
-    // commentsCount: {
-    //   type:
-    // }
   },
-  { versionKey: false }
+  { versionKey: false, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
-
+postSchema.virtual('comments', {
+  ref: 'Comment',
+  foreignField: 'post',
+  localField: '_id',
+})
 const Post = mongoose.model('Post', postSchema)
 
 module.exports = Post

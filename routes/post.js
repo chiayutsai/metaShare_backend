@@ -6,10 +6,10 @@ const Post = require('../models/PostsModel')
 const User = require('../models/UsersModel')
 const appError = require('../service/appError')
 const { isAuth } = require('../service/auth')
-const {checkUserId,checkPostId} = require('../service/checkId')
+const { checkUserId, checkPostId } = require('../service/checkId')
 
 router.get('/posts', isAuth, postControllers.getPosts)
-router.get('/posts/user/:id', isAuth,checkUserId, postControllers.getPosts)
+router.get('/posts/user/:id', isAuth, checkUserId, postControllers.getPosts)
 
 router.get('/post/:id', isAuth, checkPostId, postControllers.getPost)
 
@@ -25,5 +25,5 @@ router.patch('/post/:id', isAuth, checkPostId, postControllers.updatePost)
 
 router.patch('/post/:id/likes', isAuth, checkPostId, postControllers.updatePostLikes)
 
-router.patch('/post/:id/comments', isAuth, checkPostId, postControllers.updatePostComments)
+router.post('/post/:id/comments', isAuth, checkPostId, postControllers.updatePostComments)
 module.exports = router
