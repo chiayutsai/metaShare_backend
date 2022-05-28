@@ -36,7 +36,7 @@ class WebSocketService {
   }
 
   create = (server) => {
-    this.wss = new SocketServer({ server })
+    this.wss = new SocketServer({ server, path: '/websocket' })
 
     this.wss.on('connection', (ws) => {
       console.log('Client connected')
