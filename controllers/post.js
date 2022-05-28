@@ -6,6 +6,7 @@ const Comment = require('../models/CommentModel')
 const appError = require('../service/appError')
 const handleErrorAsync = require('../service/handleErrorAsync')
 const mongoose = require('mongoose')
+const { webSocketService, CMD_CODE } = require('../service/webSocket')
 
 const postControllers = {
   getPosts: handleErrorAsync(async (req, res, next) => {
@@ -173,7 +174,7 @@ const postControllers = {
     const post = await Post.findByIdAndUpdate(id, { [method]: { likes: userId } }, { returnDocument: 'after' })
 
     await LikesPost.findOneAndUpdate({ userId: userId }, { [method]: { posts: id } }, { returnDocument: 'after' })
-
+    webSocketService.broadcast(CMD_CODE.USER_LIKES_POST, post.toObject())
     successHandle(res, post, '更新成功')
   }),
 
@@ -190,7 +191,7 @@ const postControllers = {
       content,
       post: id,
     })
-
+    webSocketService.broadcast(CMD_CODE.USER_COMMENT_POST, comment.toObject())
     successHandle(res, comment, '留言成功')
   }),
 }
