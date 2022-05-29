@@ -5,10 +5,10 @@ const logger = require('morgan')
 const cors = require('cors')
 const swaggerUI = require('swagger-ui-express')
 const session = require('express-session')
-const createThirdPartyAuth = require('./service/thirdPartyAuth')
 
 require('./connections')
 
+const createThirdPartyAuth = require('./service/thirdPartyAuth')
 const swaggerFile = require('./swagger-output.json')
 const userRouter = require('./routes/user')
 const postRouter = require('./routes/post')

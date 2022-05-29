@@ -6,7 +6,9 @@ const Profile = require('../models/ProfileModel')
 const LikesPost = require('../models/LikesPostModel')
 const Follow = require('../models/FollowModel')
 const { generateJWT } = require('../service/auth')
+
 const clientBaseUrl = process.env.CLIENT_BASE_URL
+
 passport.serializeUser((user, done) => done(null, user._id))
 passport.deserializeUser((id, done) => {
   User.findById(id)
@@ -21,7 +23,7 @@ module.exports = (app, options) => {
   // if success and failure redirects aren't specified,
   // set some reasonable defaults
   if (!options.successRedirect) options.successRedirect = clientBaseUrl + '/metaShare/thirdPartyAuthSuccess'
-  if (!options.failureRedirect) options.failureRedirect = clientBaseUrl + '/metaShare/login?error=thirdPartyAuthFailed'
+  if (!options.failureRedirect) options.failureRedirect = clientBaseUrl + '/metaShare/login'
 
   return {
     init: function () {
@@ -47,13 +49,14 @@ module.exports = (app, options) => {
                 email,
                 password: 'facebook',
                 avator: profile._json.picture.data.url,
+                isThirdPartyLogin: true,
               })
               const userId = newUser._id
               await Profile.create({ user: userId })
               await LikesPost.create({ userId: userId })
               await Follow.create({ userId: userId })
 
-              done(null, user)
+              return done(null, newUser)
             } catch (err) {
               console.log('whoops, there was an error: ', err.message)
               if (err) return done(err, null)
