@@ -6,7 +6,7 @@ const Profile = require('../models/ProfileModel')
 const LikesPost = require('../models/LikesPostModel')
 const Follow = require('../models/FollowModel')
 const { generateJWT } = require('../service/auth')
-
+const clientBaseUrl = process.env.CLIENT_BASE_URL
 passport.serializeUser((user, done) => done(null, user._id))
 passport.deserializeUser((id, done) => {
   User.findById(id)
@@ -20,8 +20,8 @@ passport.deserializeUser((id, done) => {
 module.exports = (app, options) => {
   // if success and failure redirects aren't specified,
   // set some reasonable defaults
-  if (!options.successRedirect) options.successRedirect = 'http://localhost:5000/metaShare/thirdPartyAuthSuccess'
-  if (!options.failureRedirect) options.failureRedirect = 'http://localhost:5000/metaShare/login?error=thirdPartyAuthFailed'
+  if (!options.successRedirect) options.successRedirect = clientBaseUrl + '/metaShare/thirdPartyAuthSuccess'
+  if (!options.failureRedirect) options.failureRedirect = clientBaseUrl + '/metaShare/login?error=thirdPartyAuthFailed'
 
   return {
     init: function () {
