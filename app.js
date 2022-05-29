@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const cors = require('cors')
 const swaggerUI = require('swagger-ui-express')
+const session = require('express-session')
+const createThirdPartyAuth = require('./service/thirdPartyAuth')
 
 require('./connections')
 
@@ -37,6 +39,30 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+
+app.set('trust proxy', 1) // trust first proxy
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+  })
+)
+
+const thirdPartyAuth = createThirdPartyAuth(app, {
+  // baseUrl is optional; it will default to localhost if you omit it;
+  // it can be helpful to set this if you're not working on
+  // your local machine.  For example, if you were using a staging server,
+  // you might set the BASE_URL environment variable to
+  // https://staging.meadowlark.com
+  facebookAppId: process.env.FACEBOOK_APP_ID,
+  facebookAppSecret: process.env.FACEBOOK_APP_SECRET,
+})
+// auth.init() links in Passport middleware:
+thirdPartyAuth.init()
+// now we can specify our auth routes:
+thirdPartyAuth.registerRoutes()
 
 app.use('/api/user', userRouter)
 app.use('/api', postRouter)

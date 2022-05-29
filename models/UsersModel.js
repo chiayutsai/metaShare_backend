@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       select: false,
     },
+    isThirdPartyLogin: {
+      type: Boolean,
+    },
     password: {
       type: String,
       required: [true, '請輸入您的 密碼'],
