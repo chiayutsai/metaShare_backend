@@ -58,6 +58,8 @@ const thirdPartyAuth = createThirdPartyAuth(app, {
   // https://staging.meadowlark.com
   facebookAppId: process.env.FACEBOOK_APP_ID,
   facebookAppSecret: process.env.FACEBOOK_APP_SECRET,
+  googleAppId: process.env.GOOGLE_APP_ID,
+  googleAppSecret: process.env.GOOGLE_APP_SECRET,
 })
 // auth.init() links in Passport middleware:
 thirdPartyAuth.init()
