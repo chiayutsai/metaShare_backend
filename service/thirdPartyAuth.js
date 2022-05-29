@@ -5,6 +5,7 @@ const User = require('../models/UsersModel')
 const Profile = require('../models/ProfileModel')
 const LikesPost = require('../models/LikesPostModel')
 const Follow = require('../models/FollowModel')
+const { generateJWT } = require('../service/auth')
 
 passport.serializeUser((user, done) => done(null, user._id))
 passport.deserializeUser((id, done) => {
@@ -19,8 +20,8 @@ passport.deserializeUser((id, done) => {
 module.exports = (app, options) => {
   // if success and failure redirects aren't specified,
   // set some reasonable defaults
-  if (!options.successRedirect) options.successRedirect = '/thirdPartyAuthSuccess'
-  if (!options.failureRedirect) options.failureRedirect = '/login?error=thirdPartyAuthFailed'
+  if (!options.successRedirect) options.successRedirect = 'http://localhost:5000/metaShare/thirdPartyAuthSuccess'
+  if (!options.failureRedirect) options.failureRedirect = 'http://localhost:5000/metaShare/login?error=thirdPartyAuthFailed'
 
   return {
     init: function () {
@@ -31,18 +32,21 @@ module.exports = (app, options) => {
             clientID: options.facebookAppId,
             clientSecret: options.facebookAppSecret,
             callbackURL: (options.baseUrl || '') + '/auth/facebook/callback',
+            profileFields: ['displayName', 'photos', 'email'],
           },
           async (accessToken, refreshToken, profile, done) => {
             try {
               console.log(profile)
-              const email = 'facebook:' + profile.email
+              const email = 'facebook:' + profile._json.email
+
               const user = await User.findOne({ email })
               if (user) return done(null, user)
 
               const newUser = await User.create({
-                name: profile.name,
+                name: profile.displayName,
                 email,
-                password: '',
+                password: 'facebook',
+                avator: profile._json.picture.data.url,
               })
               const userId = newUser._id
               await Profile.create({ user: userId })
@@ -50,7 +54,7 @@ module.exports = (app, options) => {
               await Follow.create({ userId: userId })
 
               done(null, user)
-            } catch (e) {
+            } catch (err) {
               console.log('whoops, there was an error: ', err.message)
               if (err) return done(err, null)
             }
@@ -65,15 +69,17 @@ module.exports = (app, options) => {
       // register Facebook routes
       app.get('/api/auth/facebook', (req, res, next) => {
         if (req.query.redirect) req.session.authRedirect = req.query.redirect
-        passport.authenticate('facebook')(req, res, next)
+        passport.authenticate('facebook', { scope: ['email'] })(req, res, next)
       })
       app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: options.failureRedirect }), (req, res) => {
         console.log('successful /auth/facebook/callback')
         // we only get here on successful authentication
         const redirect = req.session.authRedirect
         if (redirect) delete req.session.authRedirect
+        const token = generateJWT({ _id: req.session.passport.user }, false)
+
         console.log(`redirecting to ${redirect || options.successRedirect}${redirect ? '' : ' (fallback)'}`)
-        res.redirect(303, redirect || options.successRedirect)
+        res.redirect(303, (redirect || options.successRedirect) + '?token=' + token)
       })
     },
   }

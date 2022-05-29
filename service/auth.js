@@ -5,8 +5,17 @@ const successHandle = require('../server/handle')
 const appError = require('../service/appError')
 const User = require('../models/UsersModel')
 
+const generateJWT = (user) => {
+  // 產生 JWT token
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_DAY,
+  })
+
+  return token
+}
+
 const generateSendJWT = (user, res, isResetPassword) => {
-  const erpire = isResetPassword?process.env.JWT_EXPIRES_RESET_PASSWORD_DAY:process.env.JWT_EXPIRES_DAY
+  const erpire = isResetPassword ? process.env.JWT_EXPIRES_RESET_PASSWORD_DAY : process.env.JWT_EXPIRES_DAY
   // 產生 JWT token
   const token = jwt.sign({ id: user._id, isResetPassword }, process.env.JWT_SECRET, {
     expiresIn: erpire,
@@ -83,4 +92,4 @@ const verificationAuth = handleErrorAsync(async (req, res, next) => {
   }
 })
 
-module.exports = { generateSendJWT, verificationAuth, isAuth }
+module.exports = { generateJWT, generateSendJWT, verificationAuth, isAuth }
