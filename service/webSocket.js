@@ -29,9 +29,16 @@ class WebSocketService {
 
   constructor() {
     this.#MAPPER = {
-      [CMD_CODE.WEB_SOCKET_LOGIN_REQUEST]: this.#handleWebSocketLoginRequest,
-      [CMD_CODE.SEND_CHAT_MESSAGE_REQUEST]: this.#handleSendChatMessageRequest,
-      [CMD_CODE.GET_CHANNEL_HISTORY_REQUEST]: this.#handleGetChannelHistoryRequest,
+      RESPONSE_CODE: {
+        [CMD_CODE.WEB_SOCKET_LOGIN_REQUEST]: CMD_CODE.WEB_SOCKET_LOGIN_RESPONSE,
+        [CMD_CODE.GET_CHANNEL_HISTORY_REQUEST]: CMD_CODE.GET_CHANNEL_HISTORY_RESPONSE,
+        [CMD_CODE.SEND_CHAT_MESSAGE_REQUEST]: CMD_CODE.SEND_CHAT_MESSAGE_RESPONSE,
+      },
+      MIDDLEWARE: {
+        [CMD_CODE.WEB_SOCKET_LOGIN_REQUEST]: this.#handleWebSocketLoginRequest,
+        [CMD_CODE.SEND_CHAT_MESSAGE_REQUEST]: this.#handleSendChatMessageRequest,
+        [CMD_CODE.GET_CHANNEL_HISTORY_REQUEST]: this.#handleGetChannelHistoryRequest,
+      }
     }
   }
 
@@ -52,33 +59,19 @@ class WebSocketService {
       })
     })
   }
-
+  
   // message handler
-  #handleWebSocketLoginRequest = async (ws, data) => {
-    const { token } = data
-    try {
-      const decoded = await jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
-        if (err) {
-          throw err
-        } else {
-          return payload
-        }
-      })
-
-      // 加到連線列表中
-      this.#connections[decoded.id] = ws
-
-      // 回應成功
-      this.#send(ws, CMD_CODE.WEB_SOCKET_LOGIN_RESPONSE, { message: '連線成功', online: Object.keys(this.#connections) })
-
-      // 廣播上線通知
-      this.broadcast(CMD_CODE.USER_LOGIN_NOTIFY, {
-        userId: decoded.id,
-      })
-    } catch (err) {
-      // 回應失敗
-      this.#send(ws, CMD_CODE.WEB_SOCKET_LOGIN_RESPONSE, { message: '連線失敗' })
-    }
+  #handleWebSocketLoginRequest = async (ws, data, decoded) => {
+    // 加到連線列表中
+    this.#connections[decoded.id] = ws
+  
+    // 回應成功
+    this.#send(ws, CMD_CODE.WEB_SOCKET_LOGIN_RESPONSE, { message: '連線成功', online: Object.keys(this.#connections) })
+  
+    // 廣播上線通知
+    this.broadcast(CMD_CODE.USER_LOGIN_NOTIFY, {
+      userId: decoded.id,
+    })
   }
 
   #handleSendChatMessageRequest = async (ws, data) => {
@@ -107,16 +100,32 @@ class WebSocketService {
     // 回應成功
     this.#send(ws, CMD_CODE.GET_CHANNEL_HISTORY_RESPONSE, { channel, channelId: to })
   }
+  
+  #isAuth = async (token) =>
+    await jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+      if (err) {
+        throw err
+      } else {
+        return payload
+      }
+    })
 
   // connection handler
-  #onMessage = (ws, text) => {
+  #onMessage = async (ws, text) => {
     const data = JSON.parse(text)
 
     console.log('message: ', data)
-
-    const { commandCode } = data
-
-    this.#MAPPER[commandCode]?.(ws, data)
+    
+    const { commandCode, token } = data
+  
+    try {
+      const decoded = await this.#isAuth(token)
+      this.#MAPPER.MIDDLEWARE[commandCode]?.(ws, data, decoded)
+    } catch (err) {
+      const responseCode = this.#MAPPER.RESPONSE_CODE[commandCode]
+      // 回應失敗
+      this.#send(ws, responseCode, { message: '認證失敗' })
+    }
   }
 
   #onClose = (ws) => {
