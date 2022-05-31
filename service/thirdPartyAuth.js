@@ -1,4 +1,5 @@
 const passport = require('passport')
+const axios = require('axios');
 const FacebookStrategy = require('passport-facebook').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 
@@ -43,12 +44,19 @@ module.exports = (app, options) => {
 
               const user = await User.findOne({ email })
               if (user) return done(null, user)
+  
+              const tokenResult = await axios.get(
+                `https://graph.facebook.com/oauth/access_token?client_id=${options.facebookAppId}&client_secret=${options.facebookAppSecret}&grant_type=client_credentials`
+              )
+              const pictureResult = await axios.get(
+                `https://graph.facebook.com/${profile.id}/picture?type=large&access_token=${tokenResult.data.access_token}&redirect=false`
+              )
 
               const newUser = await User.create({
                 name: profile.displayName,
                 email,
                 password: 'facebook',
-                avator: profile._json.picture.data.url,
+                avator: pictureResult.data.data.url,
                 isThirdPartyLogin: true,
               })
               const userId = newUser._id
