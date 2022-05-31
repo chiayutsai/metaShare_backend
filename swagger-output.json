@@ -564,7 +564,7 @@
           {
             "name": "Authorization",
             "in": "header",
-            "description": "JWT Token (重設密碼用 Token)",
+            "description": "JWT Token (重設密碼用 Token) Bearer {Token}",
             "required":true,
             "type": "string"
             },
@@ -1862,6 +1862,254 @@
             "description": "失敗回應",
             "schema": {
               "$ref":"#/definitions/invalidToken"
+            }
+          }
+        }
+      }
+    },
+    "/api/follow/{id}": {
+      "get": {
+        "tags": ["follow"],
+        "description": "取得追蹤名單/被誰追蹤",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [ {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "example": {
+                    "_id": "6293b3a70fc3c5334410010f",
+                    "userId": "6293b3a70fc3c53344100109",
+                    "following": [
+                        {
+                            "user": {
+                                "_id": "6293b401feccbe5de95a7d13",
+                                "name": "Neil",
+                                "avator": ""
+                            },
+                            "_id": "629517d4e698f200b5a3f1bb",
+                            "followAt": "2022-05-30T19:15:32.156Z"
+                        }
+                    ],
+                    "follower": [
+                        {
+                            "user": {
+                                "_id": "6293b6270fc3c53344100149",
+                                "name": "chiayu tsai",
+                                "isThirdPartyLogin": true,
+                                "avator": "https://lh3.googleusercontent.com/a-/AOh14Gi5TMjSjRsw_uchKU8tdDCwr_xeI8m4JsVFc5scfg=s96-c"
+                            },
+                            "_id": "6294d91c817577287d410379",
+                            "followAt": "2022-05-30T14:47:56.515Z"
+                        }
+                    ]
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "使用者 ID 格式錯誤，請重新確認"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (無此使用者)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查無此用戶"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["follow"],
+        "description": "更新追蹤名單/被誰追蹤",
+        "security":[{
+          "Bearer":[]
+        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "example": {
+                    "_id": "6293b3a70fc3c5334410010f",
+                    "userId": "6293b3a70fc3c53344100109",
+                    "following": [
+                        {
+                            "user": {
+                                "_id": "6293b401feccbe5de95a7d13",
+                                "name": "Neil",
+                                "avator": ""
+                            },
+                            "_id": "629517d4e698f200b5a3f1bb",
+                            "followAt": "2022-05-30T19:15:32.156Z"
+                        }
+                    ],
+                    "follower": [
+                        {
+                            "user": {
+                                "_id": "6293b6270fc3c53344100149",
+                                "name": "chiayu tsai",
+                                "isThirdPartyLogin": true,
+                                "avator": "https://lh3.googleusercontent.com/a-/AOh14Gi5TMjSjRsw_uchKU8tdDCwr_xeI8m4JsVFc5scfg=s96-c"
+                            },
+                            "_id": "6294d91c817577287d410379",
+                            "followAt": "2022-05-30T14:47:56.515Z"
+                        }
+                    ]
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (未帶 Token)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/notFoundToken"
+            }
+          },
+          "400 (Token 失效)": {
+            "description": "失敗回應",
+            "schema": {
+              "$ref":"#/definitions/invalidToken"
+            }
+          },
+          "400 (追蹤自己)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "無法追蹤自己的帳號"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (ID 格式錯誤)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "使用者 ID 格式錯誤，請重新確認"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400 (無此使用者)": {
+            "description": "失敗回應",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "查無此用戶"
+                }
+              
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           }
         }
