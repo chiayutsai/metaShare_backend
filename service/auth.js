@@ -59,6 +59,11 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   }
   if (decoded) {
     const currentUser = await User.findById(decoded.id)
+  
+    if (!currentUser) {
+      return next(appError(400, '認證失敗，請重新登入'))
+    }
+    
     req.user = currentUser
     next()
   }
@@ -87,6 +92,11 @@ const verificationAuth = handleErrorAsync(async (req, res, next) => {
   }
   if (decoded) {
     const currentUser = await User.findById(decoded.id)
+  
+    if (!currentUser) {
+      return next(appError(400, '認證失敗，請重新輸入E-mail 取得驗證碼'))
+    }
+
     req.user = currentUser
     next()
   }
